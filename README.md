@@ -7,6 +7,16 @@
 ## Overview
 This repository offers a simple implementation of a modified version [Twitter](https://twitter.com/?lang=en) by using different type of databases. The results queries and performances to answer different questions were presented at [Cabane.io 2021](https://cabane.io/) annual conference.
 
+## Data model
+Our data model, very simplified compared to the real Twitter, looks like this: 
+<p align="center">
+  <img height=200 src="./img/data-model.png">
+</p>
+
+There is one important detail here regarding the `User`. In twitter, there are not many types of users. 
+
+I wanted however to experiment inheritance, since it's a common problem developers have to face when working in Object Oriented paradigm, and most times, that hierarchy has to be represented in the database as well. For this reason, the `User` is declined in two different concrete types: `Business`, and `Individial`
+
 ## Databases
 Many databases are compared in this non-exhausive enumeration in the attempt to create the most performant database model to answer classic questions for a social network, while also remaining developer friendly. 
 
