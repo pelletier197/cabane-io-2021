@@ -5,7 +5,7 @@
 </p>
 
 ## Overview
-This repository offers a simple implementation of [Twitter](https://twitter.com/?lang=en) by using different type of databases. The results queries and performances to answer different questions were presented at [Cabane.io 2021](https://cabane.io/) annual conference.
+This repository offers a simple implementation of a modified version [Twitter](https://twitter.com/?lang=en) by using different type of databases. The results queries and performances to answer different questions were presented at [Cabane.io 2021](https://cabane.io/) annual conference.
 
 ## Databases
 Many databases are compared in this non-exhausive enumeration in the attempt to create the most performant database model to answer classic questions for a social network, while also remaining developer friendly. 
@@ -20,3 +20,6 @@ The second one on our list is the probably the most popular document database, [
 
 ### Neo4j 
 Next one on our list is by far the most popular Graph database on the market. [Neo4j](https://neo4j.com/) has been around since 2007, but it's gotten more popular only in the last few years, as use-cases for Graph databases seem to multiply.
+
+### ArangoDB
+Last but not least on our list is [ArangoDB](https://www.arangodb.com/), that I have personally only heard about very recently. Unlike all other databases, this one is a `multi-model` database. It supports documents, graphs and key-value, all in one! 
