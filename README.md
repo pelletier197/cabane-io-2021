@@ -1,7 +1,7 @@
 # Graphs and birds
 
 <p align="center">
-  <img height=200 src="./img/logo.png">
+  <img src="./img/logo.png">
 </p>
 
 ## Overview
