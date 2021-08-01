@@ -1,1 +1,19 @@
+spring:
+  main:
+    web-application-type: none
+
+  neo4j:
+    authentication:
+      username: neo4j
+      password: cabaneio2021
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cabaneio
+    username: postgres
+    password: cabaneio2021
 
