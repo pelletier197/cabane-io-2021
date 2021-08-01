@@ -33,3 +33,11 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=mongo
       - MONGO_INITDB_ROOT_PASSWORD=cabaneio2021
       - MONGO_INITDB_DATABASE=admin
+
+  arango-db:
+    image: arangodb:3.8.0
+    container_name: arangodb
+    ports:
+      - 8529:8529
+    environment:
+      - ARANGO_ROOT_PASSWORD=cabaneio2021

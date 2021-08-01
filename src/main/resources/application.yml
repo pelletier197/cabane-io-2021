@@ -2,11 +2,13 @@ spring:
   main:
     web-application-type: none
 
+  # Neo4j
   neo4j:
     authentication:
       username: neo4j
       password: cabaneio2021
 
+  # Postgres
   jpa:
     hibernate:
       ddl-auto: validate
@@ -17,3 +19,9 @@ spring:
     username: postgres
     password: cabaneio2021
 
+  # Mongo
+  data:
+    mongodb:
+      database: cabaneio
+      username: mongo
+      password: cabaneio2021
