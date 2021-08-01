@@ -3,6 +3,7 @@ package com.qohash.cabaneio2021.model.tweet
 import com.qohash.cabaneio2021.model.contact.web.Link
 import com.qohash.cabaneio2021.model.tweet.tags.HashTag
 import com.qohash.cabaneio2021.model.user.User
+import java.util.*
 
 data class Tweet(
     val id: TweetId,
@@ -15,5 +16,5 @@ data class Tweet(
 
 @JvmInline
 value class TweetId(
-    val value: String
+    val value: UUID
 )

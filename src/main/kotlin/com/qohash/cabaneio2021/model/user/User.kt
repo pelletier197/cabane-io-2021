@@ -1,6 +1,7 @@
 package com.qohash.cabaneio2021.model.user
 
 import java.time.Instant
+import java.util.*
 
 interface User {
     val id: UserId
@@ -11,7 +12,7 @@ interface User {
 
 @JvmInline
 value class UserId(
-    val value: String
+    val value: UUID
 )
 
 

@@ -25,7 +25,7 @@ services:
       - POSTGRES_DB=cabaneio
 
   mongo:
-    image: mongo:4.4.8
+    image: mongo:4.4.7
     container_name: mongo
     ports:
       - 27017:27017

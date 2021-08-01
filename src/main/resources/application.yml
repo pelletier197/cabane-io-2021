@@ -25,3 +25,8 @@ spring:
       database: cabaneio
       username: mongo
       password: cabaneio2021
+
+  # Arango
+    arangodb:
+      user: root
+      password: cabaneio2021
