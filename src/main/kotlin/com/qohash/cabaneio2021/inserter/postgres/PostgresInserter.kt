@@ -22,10 +22,6 @@ class PostgresInserter : Inserter {
         TODO("Not yet implemented")
     }
 
-    override fun insertRetweets(userRetweets: Map<User, List<Retweet>>) {
-        TODO("Not yet implemented")
-    }
-
     override fun insertTweetLikes(insertTweetLikes: Map<User, List<Tweet>>) {
         TODO("Not yet implemented")
     }
