@@ -7,11 +7,17 @@ import java.util.*
 
 data class Tweet(
     val id: TweetId,
-    val retweets: Tweet?,
+    val text: String,
+    val author: User,
     val hashtags: Set<HashTag>,
     val links: Set<Link>,
     val mentions: Set<User>,
     val source: Source,
+)
+
+data class Retweet(
+    val id: TweetId,
+    val original: Tweet,
 )
 
 @JvmInline
