@@ -18,7 +18,7 @@ import kotlin.random.Random
 
 private val faker = Faker()
 private val nonAlphabeticChars = Regex("[^A-Za-z0-9 ]")
-private val allHashTags = randomSetOf(size = 1000u) { faker.quote.famousLastWords() }
+private val allHashTags = randomSetOf(size = 1000u) { faker.verbs.base() }
 private val allLinks = randomSetOf { URL("https://${faker.internet.domain()}") }
 
 fun randomUser(): User {
@@ -68,6 +68,8 @@ fun randomIndividual(): Individual {
 }
 
 fun randomTweet(users: List<User>): Tweet {
+    val t = faker.verbs.base()
+    println(t)
     return Tweet(
         id = TweetId(UUID.randomUUID()),
         text = faker.movie.quote(),
@@ -105,8 +107,3 @@ fun randomLink(): Link {
     return Link(allLinks.random())
 }
 
-fun main() {
-    println(randomBusiness())
-    println(randomIndividual())
-    println(allHashTags)
-}
