@@ -5,16 +5,16 @@ import com.qohash.cabaneio2021.model.contact.Location
 import com.qohash.cabaneio2021.model.contact.PhoneNumber
 import com.qohash.cabaneio2021.model.contact.web.Link
 import com.qohash.cabaneio2021.model.contact.web.WebSite
-import com.qohash.cabaneio2021.model.tweet.Source
-import com.qohash.cabaneio2021.model.tweet.Tweet
-import com.qohash.cabaneio2021.model.tweet.TweetId
-import com.qohash.cabaneio2021.model.tweet.tags.HashTag
+import com.qohash.cabaneio2021.model.post.Source
+import com.qohash.cabaneio2021.model.post.Tweet
+import com.qohash.cabaneio2021.model.post.PostId
+import com.qohash.cabaneio2021.model.post.Retweet
+import com.qohash.cabaneio2021.model.post.tags.HashTag
 import com.qohash.cabaneio2021.model.user.*
 import io.github.serpro69.kfaker.Faker
 import java.net.URL
 import java.time.temporal.ChronoUnit
 import java.util.*
-import kotlin.random.Random
 
 private val faker = Faker()
 private val nonAlphabeticChars = Regex("[^A-Za-z0-9 ]")
@@ -68,10 +68,8 @@ fun randomIndividual(): Individual {
 }
 
 fun randomTweet(users: List<User>): Tweet {
-    val t = faker.verbs.base()
-    println(t)
     return Tweet(
-        id = TweetId(UUID.randomUUID()),
+        id = PostId(UUID.randomUUID()),
         text = faker.movie.quote(),
         author = users.random(),
         hashtags = randomSetOf(size = randomUInt(max = 5u)) { randomHashTag() },
@@ -80,6 +78,14 @@ fun randomTweet(users: List<User>): Tweet {
         source = Source(
             name = faker.device.modelName()
         ),
+    )
+}
+
+fun randomRetweet(users: List<User>, tweets: List<Tweet>): Retweet {
+    return Retweet(
+        id = PostId(UUID.randomUUID()),
+        author = users.random(),
+        tweet = tweets.random()
     )
 }
 

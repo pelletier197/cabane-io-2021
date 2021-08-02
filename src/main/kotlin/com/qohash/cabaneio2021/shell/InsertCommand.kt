@@ -1,6 +1,10 @@
 package com.qohash.cabaneio2021.shell
 
 import com.qohash.cabaneio2021.inserter.Inserter
+import com.qohash.cabaneio2021.inserter.arangodb.ARANGO_DB
+import com.qohash.cabaneio2021.inserter.mongo.MONGO
+import com.qohash.cabaneio2021.inserter.neo4j.NEO4J
+import com.qohash.cabaneio2021.inserter.postgres.POSTGRES
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellOption
@@ -17,7 +21,7 @@ class InsertCommand(
         @ShellOption(value = ["the number of users to insert"], defaultValue = "10000") count: UInt,
         @ShellOption(
             value = ["the target inserters"],
-            defaultValue = "postgres,mongo,neo4j,arangodb",
+            defaultValue = "$POSTGRES,$MONGO,$NEO4J,$ARANGO_DB",
         ) inserterNames: Set<String>
     ) {
         println("count: $count")

@@ -1,4 +1,4 @@
-package com.qohash.cabaneio2021.model.tweet.tags
+package com.qohash.cabaneio2021.model.post.tags
 
 @JvmInline
 value class HashTag(
