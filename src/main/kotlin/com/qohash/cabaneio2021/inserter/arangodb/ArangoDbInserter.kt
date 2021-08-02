@@ -1,6 +1,7 @@
 package com.qohash.cabaneio2021.inserter.arangodb
 
 import com.qohash.cabaneio2021.inserter.Inserter
+import com.qohash.cabaneio2021.model.post.Retweet
 import com.qohash.cabaneio2021.model.post.Tweet
 import com.qohash.cabaneio2021.model.user.User
 
@@ -14,6 +15,10 @@ class ArangoDbInserter : Inserter {
     }
 
     override fun insertTweets(tweets: List<Tweet>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun insertRetweet(retweet: Retweet) {
         TODO("Not yet implemented")
     }
 
