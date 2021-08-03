@@ -3,7 +3,7 @@ package com.qohash.cabaneio2021.model.user
 import java.time.Instant
 import java.util.*
 
-interface User {
+sealed interface User {
     val id: UserId
     val handle: Handle
     val name: String

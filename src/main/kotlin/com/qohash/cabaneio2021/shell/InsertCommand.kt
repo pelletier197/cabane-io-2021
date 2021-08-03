@@ -8,6 +8,10 @@ import com.qohash.cabaneio2021.inserter.postgres.POSTGRES
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellOption
+import javax.validation.Valid
+import javax.validation.constraints.Max
+import javax.validation.constraints.Pattern
+import javax.validation.constraints.Positive
 
 @ShellComponent
 class InsertCommand(
@@ -18,11 +22,11 @@ class InsertCommand(
         key = ["insert-data"],
     )
     fun insertData(
-        @ShellOption(value = ["the number of users to insert"], defaultValue = "10000") count: UInt,
+        @ShellOption(value = ["--count"], defaultValue = "10000") @Positive @Max(value = 100_000) count: UInt,
         @ShellOption(
-            value = ["the target inserters"],
+            value = ["--inserters"],
             defaultValue = "$POSTGRES,$MONGO,$NEO4J,$ARANGO_DB",
-        ) inserterNames: Set<String>
+        ) inserterNames: Set<@Pattern(regexp = "^($POSTGRES|$MONGO|$NEO4J|$ARANGO_DB)$") String>
     ) {
         println("count: $count")
         println("inserters: $inserterNames")

@@ -7,13 +7,13 @@ import com.qohash.cabaneio2021.model.user.User
 interface Inserter {
     val name: String
 
-    fun insertUsers(users: List<User>)
+    fun insertUsers(users: Set<User>)
 
-    fun insertTweets(tweets: List<Tweet>)
+    fun insertTweets(tweets: Set<Tweet>)
 
-    fun insertRetweet(retweet: Retweet)
+    fun insertRetweets(retweets: Set<Retweet>)
 
-    fun insertTweetLikes(insertTweetLikes: Map<User, List<Tweet>>)
+    fun insertTweetLikes(insertTweetLikes: Map<User, Set<Tweet>>)
 
-    fun insertUserFollows(usersWithFollowers: Map<User, List<User>>)
+    fun insertUserFollows(usersWithFollowers: Map<User, Set<User>>)
 }

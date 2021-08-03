@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.contracts.model.structure.UNKNOWN_COMPUTATION.type
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -39,7 +40,7 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xemit-jvm-type-annotations")
         jvmTarget = "11"
     }
 }

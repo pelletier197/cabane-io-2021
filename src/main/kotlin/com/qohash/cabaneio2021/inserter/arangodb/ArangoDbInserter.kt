@@ -10,23 +10,23 @@ const val ARANGO_DB = "arangodb"
 class ArangoDbInserter : Inserter {
     override val name: String = ARANGO_DB
 
-    override fun insertUsers(users: List<User>) {
+    override fun insertUsers(users: Set<User>) {
         TODO("Not yet implemented")
     }
 
-    override fun insertTweets(tweets: List<Tweet>) {
+    override fun insertTweets(tweets: Set<Tweet>) {
         TODO("Not yet implemented")
     }
 
-    override fun insertRetweet(retweet: Retweet) {
+    override fun insertRetweets(retweets: Set<Retweet>) {
         TODO("Not yet implemented")
     }
 
-    override fun insertTweetLikes(insertTweetLikes: Map<User, List<Tweet>>) {
+    override fun insertTweetLikes(insertTweetLikes: Map<User, Set<Tweet>>) {
         TODO("Not yet implemented")
     }
 
-    override fun insertUserFollows(usersWithFollowers: Map<User, List<User>>) {
+    override fun insertUserFollows(usersWithFollowers: Map<User, Set<User>>) {
         TODO("Not yet implemented")
     }
 }
