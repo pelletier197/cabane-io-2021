@@ -2,7 +2,7 @@ version: "2.2"
 services:
   neo4j:
     image: neo4j:4.3.2-community
-    container_name: neo4j
+    container_name: neo4j-cabane
     ports:
       - "7474:7474" # Database port
       - "7687:7687" # web browser
@@ -16,7 +16,7 @@ services:
 
   postgres:
     image: postgres:11
-    container_name: postgres
+    container_name: postgres-cabane
     ports:
       - 5432:5432
     environment:
@@ -26,7 +26,7 @@ services:
 
   mongo:
     image: mongo:4.4.7
-    container_name: mongo
+    container_name: mongo-cabane
     ports:
       - 27017:27017
     environment:
@@ -36,7 +36,7 @@ services:
 
   arango-db:
     image: arangodb:3.8.0
-    container_name: arangodb
+    container_name: arangodb-cabane
     ports:
       - 8529:8529
     environment:

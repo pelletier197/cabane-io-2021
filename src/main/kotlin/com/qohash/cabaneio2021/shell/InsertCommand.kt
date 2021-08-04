@@ -1,5 +1,6 @@
 package com.qohash.cabaneio2021.shell
 
+import com.qohash.cabaneio2021.inserter.DataInsertionService
 import com.qohash.cabaneio2021.inserter.Inserter
 import com.qohash.cabaneio2021.inserter.arangodb.ARANGO_DB
 import com.qohash.cabaneio2021.inserter.mongo.MONGO
@@ -15,7 +16,7 @@ import javax.validation.constraints.Positive
 
 @ShellComponent
 class InsertCommand(
-    private val inserters: List<Inserter>
+    private val insertionService: DataInsertionService
 ) {
     @ShellMethod(
         value = "insert data into all target databases",
@@ -28,7 +29,9 @@ class InsertCommand(
             defaultValue = "$POSTGRES,$MONGO,$NEO4J,$ARANGO_DB",
         ) inserterNames: Set<@Pattern(regexp = "^($POSTGRES|$MONGO|$NEO4J|$ARANGO_DB)$") String>
     ) {
-        println("count: $count")
-        println("inserters: $inserterNames")
+        insertionService.insertData(
+            usersCount = count,
+            inserterNames = inserterNames,
+        )
     }
 }

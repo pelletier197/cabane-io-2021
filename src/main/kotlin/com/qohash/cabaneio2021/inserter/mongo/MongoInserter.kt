@@ -5,14 +5,14 @@ import com.qohash.cabaneio2021.inserter.TwitterModel
 import com.qohash.cabaneio2021.model.post.Retweet
 import com.qohash.cabaneio2021.model.post.Tweet
 import com.qohash.cabaneio2021.model.user.User
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 
 const val MONGO = "mongo"
 
 @Component
+@Qualifier(MONGO)
 class MongoInserter  : Inserter {
-    override val name: String = MONGO
-
     override fun insert(model: TwitterModel) {
         TODO("Not yet implemented")
     }

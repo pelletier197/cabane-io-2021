@@ -5,7 +5,7 @@ import com.qohash.cabaneio2021.model.post.Retweet
 import com.qohash.cabaneio2021.model.post.Tweet
 import com.qohash.cabaneio2021.model.user.User
 
-data class LazyLoadedTwitterModel(
+private data class LazyLoadedTwitterModel(
     val usersCount: UInt,
 ) : TwitterModel {
     private val tweetCount = usersCount * 10u
@@ -37,11 +37,11 @@ data class LazyLoadedTwitterModel(
             (0u..randomUInt(maxFollowPerUser)).mapTo(HashSet()) { usersList.random() }
         }
     }
+}
 
-    fun generateTwitterModel(usersCount: UInt): TwitterModel {
-        return LazyLoadedTwitterModel(
-            usersCount = usersCount,
-        )
-    }
+fun randomTwitterModel(usersCount: UInt): TwitterModel {
+    return LazyLoadedTwitterModel(
+        usersCount = usersCount,
+    )
 }
 

@@ -33,3 +33,11 @@ Next one on our list is by far the most popular Graph database on the market. [N
 
 ### ArangoDB
 Last but not least on our list is [ArangoDB](https://www.arangodb.com/), that I have personally only heard about very recently. Unlike all other databases, this one is a `multi-model` database. It supports documents, graphs and key-value, all in one! 
+
+
+## How to run
+### Requirements
+- Java 11+ 
+- Docker with docker-compose to start the databases
+
+### Start the application
