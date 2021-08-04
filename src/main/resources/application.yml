@@ -2,6 +2,9 @@ spring:
   main:
     web-application-type: none
     lazy-initialization: true
+  autoconfigure:
+    exclude: H
+
 
   # Neo4j
   neo4j:
@@ -15,6 +18,10 @@ spring:
       ddl-auto: none
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false # Allow avoiding to query database at startup for metadata
   datasource:
     url: jdbc:postgresql://localhost:5432/cabaneio
     username: postgres
@@ -27,7 +34,7 @@ spring:
       username: mongo
       password: cabaneio2021
 
-  # Arango
+    # Arango
     arangodb:
       user: root
       password: cabaneio2021
