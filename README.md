@@ -11,7 +11,7 @@ This repository offers a simple implementation of a modified version [Twitter](h
 Our data model, very simplified compared to the real Twitter, looks like this: 
 <p align="center">
   <img src="./img/data-model.png">
-</p>
+g</p>
 
 There is one important detail here regarding the `User`. In twitter, there are not many types of users. 
 
