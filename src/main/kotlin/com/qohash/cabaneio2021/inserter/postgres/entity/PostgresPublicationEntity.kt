@@ -10,8 +10,19 @@ import javax.persistence.*
     discriminatorType = DiscriminatorType.STRING,
 )
 abstract class PostgresPublicationEntity(
-    @Id val id: UUID,
-    @ManyToOne val author: PostgresUserEntity,
+    @Id open val id: UUID,
+    @ManyToOne open val author: PostgresUserEntity,
+)
+
+@Entity
+@Table(name = "retweets")
+class PostgresRetweetEntity(
+    id: UUID,
+    author: PostgresUserEntity,
+    @ManyToOne val tweet: PostgresTweetEntity,
+) : PostgresPublicationEntity(
+    id = id,
+    author = author,
 )
 
 @Entity

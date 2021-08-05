@@ -28,7 +28,7 @@ class PostgresInserter(
     private val repository: PostgresUserRepository,
 ) : Inserter {
     override fun insert(model: TwitterModel) {
-        repository.save(model.users.first().toPostgres())
+        repository.save(model.users.first().toPostgres(model))
         println(repository.findAll())
     }
 }
