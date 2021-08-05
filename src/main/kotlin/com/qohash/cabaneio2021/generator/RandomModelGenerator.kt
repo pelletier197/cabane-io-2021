@@ -71,7 +71,6 @@ fun randomTweet(users: List<User>): Tweet {
     return Tweet(
         id = PublicationId(UUID.randomUUID()),
         text = faker.movie.quote(),
-        author = users.random(),
         hashtags = randomSetOf(size = randomUInt(max = 5u)) { randomHashTag() },
         links = randomSetOf(size = randomUInt(max = 3u)) { randomLink() },
         mentions = randomListOf(size = randomUInt(4u)) { users.random() }.distinct().toSet(),
@@ -84,7 +83,6 @@ fun randomTweet(users: List<User>): Tweet {
 fun randomRetweet(users: List<User>, tweets: List<Tweet>): Retweet {
     return Retweet(
         id = PublicationId(UUID.randomUUID()),
-        author = users.random(),
         tweet = tweets.random()
     )
 }

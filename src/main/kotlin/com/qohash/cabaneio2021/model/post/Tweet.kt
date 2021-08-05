@@ -6,7 +6,6 @@ import com.qohash.cabaneio2021.model.user.User
 
 data class Tweet(
     override val id: PublicationId,
-    override val author: User,
     val text: String,
     val hashtags: Set<HashTag>,
     val links: Set<Link>,

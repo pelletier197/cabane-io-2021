@@ -17,6 +17,8 @@ abstract class PostgresUserEntity(
     open val name: String,
     @Column(name = "join_date")
     open val joinDate: Instant,
+    @OneToMany(cascade = [CascadeType.PERSIST], mappedBy = "author")
+    open val publications: List<PostgresPublicationEntity>
 )
 
 @Entity
@@ -27,6 +29,7 @@ class PostgresIndividualEntity(
     handle: String,
     name: String,
     joinDate: Instant,
+    publications: List<PostgresPublicationEntity>,
     @Column(name = "birth_date")
     val birthDate: Instant,
     val gender: String
@@ -34,7 +37,8 @@ class PostgresIndividualEntity(
     id = id,
     handle = handle,
     name = name,
-    joinDate = joinDate
+    joinDate = joinDate,
+    publications = publications,
 )
 
 @Entity
@@ -45,6 +49,7 @@ class PostgresBusinessEntity(
     handle: String,
     name: String,
     joinDate: Instant,
+    publications: List<PostgresPublicationEntity>,
     @Column(name = "number_of_employees")
     val numberOfEmployees: Long,
     val phone: String?,
@@ -62,5 +67,6 @@ class PostgresBusinessEntity(
     id = id,
     handle = handle,
     name = name,
-    joinDate = joinDate
+    joinDate = joinDate,
+    publications = publications
 )

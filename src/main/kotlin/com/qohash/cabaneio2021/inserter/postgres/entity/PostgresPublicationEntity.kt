@@ -1,12 +1,45 @@
 package com.qohash.cabaneio2021.inserter.postgres.entity
 
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
+
+@Entity
+@Table(name = "publications")
+@DiscriminatorColumn(
+    name = "type",
+    discriminatorType = DiscriminatorType.STRING,
+)
+abstract class PostgresPublicationEntity(
+    @Id val id: UUID,
+    @ManyToOne val author: PostgresUserEntity,
+)
 
 @Entity
 @Table(name = "tweets")
-abstract class PostgresPublicationEntity(
-    @Id val id: UUID
+class PostgresTweetEntity(
+    id: UUID,
+    author: PostgresUserEntity,
+    val text: String,
+    @Column(name = "source_name")
+    val sourceName: String,
+    @ManyToMany val hashTags: List<HashTagEntity>,
+    @ManyToMany val links: List<LinkEntity>,
+    @ManyToMany val mentions: List<PostgresUserEntity>,
+) : PostgresPublicationEntity(
+    id = id,
+    author = author,
+)
+
+@Entity
+@Table(name = "hash_tags")
+data class HashTagEntity(
+    @Id
+    val value: String
+)
+
+@Entity
+@Table(name = "links")
+data class LinkEntity(
+    @Id
+    val url: String
 )

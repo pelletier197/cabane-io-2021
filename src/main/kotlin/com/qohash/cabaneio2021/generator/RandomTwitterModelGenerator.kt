@@ -9,7 +9,8 @@ private data class LazyLoadedTwitterModel(
     val usersCount: UInt,
 ) : TwitterModel {
     private val tweetCount = usersCount * 10u
-    private val retweetCount = tweetCount * 10u
+    private val maxTweetsPerUser = 30u
+    private val maxRetweetsPerUser = 90u
     private val maxLikesPerUser = 100u
     private val maxFollowPerUser = 100u
 
@@ -18,18 +19,29 @@ private data class LazyLoadedTwitterModel(
     private val tweetList by lazy { randomListOf(size = tweetCount) { randomTweet(usersList) } }
 
     override val users: Set<User> by lazy { usersList.toSet() }
-    override val tweets: Set<Tweet> by lazy { tweetList.toSet() }
-    override val retweets: Set<Retweet> by lazy {
-        randomSetOf(size = retweetCount) {
-            randomRetweet(
-                usersList,
-                tweetList
-            )
+    override val userTweets: Map<User, Set<Tweet>> by lazy {
+        usersList.associateWith {
+            randomSetOf(size = randomUInt(max = maxRetweetsPerUser)) {
+                randomTweet(usersList)
+            }
+        }
+    }
+
+    override val userRetweets: Map<User, Set<Retweet>> by lazy {
+        usersList.associateWith {
+            randomSetOf(size = randomUInt(max = maxTweetsPerUser)) {
+                randomRetweet(
+                    usersList,
+                    tweetList
+                )
+            }
         }
     }
     override val userTweetLikes: Map<User, Set<Tweet>> by lazy {
+        val userTweetEntries = userTweets.entries.toList()
+
         usersList.associateWith {
-            (0u..randomUInt(max = maxLikesPerUser)).mapTo(HashSet()) { tweets.random() }
+            (0u..randomUInt(max = maxLikesPerUser)).mapTo(HashSet()) { userTweetEntries.random().value.random() }
         }
     }
     override val userFollows: Map<User, Set<User>> by lazy {
