@@ -9,8 +9,8 @@ This repository offers a simple implementation of a modified version [Twitter](h
 
 ## Data model
 Our data model, very simplified compared to the real Twitter, looks like this: 
-<p align="center" width="100%">
-  <img height=200 src="./img/data-model.png">
+<p align="center">
+  <img src="./img/data-model.png">
 </p>
 
 There is one important detail here regarding the `User`. In twitter, there are not many types of users. 
