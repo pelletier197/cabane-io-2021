@@ -15,13 +15,14 @@ spring:
   # Postgres
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false # Allow avoiding to query database at startup for metadata
+    show-sql: true
   datasource:
     url: jdbc:postgresql://localhost:5432/cabaneio
     username: postgres

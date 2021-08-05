@@ -2,21 +2,26 @@ package com.qohash.cabaneio2021.inserter.postgres.entity
 
 import java.time.Instant
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(
+    name = "type",
+    discriminatorType = DiscriminatorType.STRING
+)
 abstract class PostgresUserEntity(
-    @Id val id: UUID,
-    val handle: String,
-    val name: String,
+    @Id open val id: UUID,
+    open val handle: String,
+    open val name: String,
     @Column(name = "join_date")
-    val joinDate: Instant,
+    open val joinDate: Instant,
 )
 
+@Entity
+@Table(name = "individuals")
+@DiscriminatorValue("individual")
 class PostgresIndividualEntity(
     id: UUID,
     handle: String,
@@ -32,6 +37,9 @@ class PostgresIndividualEntity(
     joinDate = joinDate
 )
 
+@Entity
+@Table(name = "businesses")
+@DiscriminatorValue("business")
 class PostgresBusinessEntity(
     id: UUID,
     handle: String,

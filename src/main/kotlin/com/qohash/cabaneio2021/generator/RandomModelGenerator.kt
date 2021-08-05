@@ -7,7 +7,7 @@ import com.qohash.cabaneio2021.model.contact.web.Link
 import com.qohash.cabaneio2021.model.contact.web.WebSite
 import com.qohash.cabaneio2021.model.post.Source
 import com.qohash.cabaneio2021.model.post.Tweet
-import com.qohash.cabaneio2021.model.post.PostId
+import com.qohash.cabaneio2021.model.post.PublicationId
 import com.qohash.cabaneio2021.model.post.Retweet
 import com.qohash.cabaneio2021.model.post.tags.HashTag
 import com.qohash.cabaneio2021.model.user.*
@@ -69,7 +69,7 @@ fun randomIndividual(): Individual {
 
 fun randomTweet(users: List<User>): Tweet {
     return Tweet(
-        id = PostId(UUID.randomUUID()),
+        id = PublicationId(UUID.randomUUID()),
         text = faker.movie.quote(),
         author = users.random(),
         hashtags = randomSetOf(size = randomUInt(max = 5u)) { randomHashTag() },
@@ -83,7 +83,7 @@ fun randomTweet(users: List<User>): Tweet {
 
 fun randomRetweet(users: List<User>, tweets: List<Tweet>): Retweet {
     return Retweet(
-        id = PostId(UUID.randomUUID()),
+        id = PublicationId(UUID.randomUUID()),
         author = users.random(),
         tweet = tweets.random()
     )

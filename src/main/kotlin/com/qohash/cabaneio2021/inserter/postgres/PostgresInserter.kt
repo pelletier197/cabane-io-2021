@@ -2,6 +2,7 @@ package com.qohash.cabaneio2021.inserter.postgres
 
 import com.qohash.cabaneio2021.inserter.Inserter
 import com.qohash.cabaneio2021.inserter.TwitterModel
+import com.qohash.cabaneio2021.inserter.postgres.assembler.toPostgres
 import com.qohash.cabaneio2021.inserter.postgres.entity.PostgresUserEntity
 import com.qohash.cabaneio2021.model.post.Retweet
 import com.qohash.cabaneio2021.model.post.Tweet
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Lazy
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Component
 import java.util.*
+import java.util.UUID.randomUUID
 
 const val POSTGRES = "postgres"
 
@@ -24,13 +26,9 @@ interface PostgresUserRepository : CrudRepository<PostgresUserEntity, UUID>
 @Lazy
 class PostgresInserter(
     private val repository: PostgresUserRepository,
-    private val context: ApplicationContext,
 ) : Inserter {
-    init {
-        println("AAAAAAAAAAAAAAa")
-    }
-
     override fun insert(model: TwitterModel) {
-        repository.save(PostgresUserEntity(UUID.randomUUID()))
+        repository.save(model.users.first().toPostgres())
+        println(repository.findAll())
     }
 }
