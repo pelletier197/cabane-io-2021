@@ -46,7 +46,7 @@ private data class LazyLoadedTwitterModel(
     }
     override val userFollows: Map<User, Set<User>> by lazy {
         usersList.associateWith {
-            (0u..randomUInt(maxFollowPerUser)).mapTo(HashSet()) { usersList.random() }
+            (0u..randomUInt(maxFollowPerUser)).mapTo(HashSet()) { usersList.random() } - it // Can't follow yourself
         }
     }
 }
