@@ -17,8 +17,10 @@ abstract class PostgresUserEntity(
     open val name: String,
     @Column(name = "join_date")
     open val joinDate: Instant,
-    @OneToMany(cascade = [CascadeType.PERSIST], mappedBy = "author")
-    open val publications: List<PostgresPublicationEntity>
+    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "author")
+    open var tweets: List<PostgresTweetEntity>,
+    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "author")
+    open var retweets: List<PostgresRetweetEntity>,
 )
 
 @Entity
@@ -29,7 +31,8 @@ class PostgresIndividualEntity(
     handle: String,
     name: String,
     joinDate: Instant,
-    publications: List<PostgresPublicationEntity>,
+    tweets: List<PostgresTweetEntity>,
+    retweets: List<PostgresRetweetEntity>,
     @Column(name = "birth_date")
     val birthDate: Instant,
     val gender: String
@@ -38,7 +41,8 @@ class PostgresIndividualEntity(
     handle = handle,
     name = name,
     joinDate = joinDate,
-    publications = publications,
+    tweets = tweets,
+    retweets = retweets,
 )
 
 @Entity
@@ -49,7 +53,8 @@ class PostgresBusinessEntity(
     handle: String,
     name: String,
     joinDate: Instant,
-    publications: List<PostgresPublicationEntity>,
+    tweets: List<PostgresTweetEntity>,
+    retweets: List<PostgresRetweetEntity>,
     @Column(name = "number_of_employees")
     val numberOfEmployees: Long,
     val phone: String?,
@@ -68,5 +73,6 @@ class PostgresBusinessEntity(
     handle = handle,
     name = name,
     joinDate = joinDate,
-    publications = publications
+    tweets = tweets,
+    retweets = retweets,
 )

@@ -11,46 +11,41 @@ import javax.persistence.*
 )
 abstract class PostgresPublicationEntity(
     @Id open val id: UUID,
-    @ManyToOne open val author: PostgresUserEntity,
 )
 
 @Entity
 @Table(name = "retweets")
 class PostgresRetweetEntity(
     id: UUID,
-    author: PostgresUserEntity,
     @ManyToOne val tweet: PostgresTweetEntity,
 ) : PostgresPublicationEntity(
     id = id,
-    author = author,
 )
 
 @Entity
 @Table(name = "tweets")
 class PostgresTweetEntity(
     id: UUID,
-    author: PostgresUserEntity,
     val text: String,
     @Column(name = "source_name")
     val sourceName: String,
-    @ManyToMany val hashTags: List<HashTagEntity>,
-    @ManyToMany val links: List<LinkEntity>,
+    @ManyToMany val hashTags: List<PostgresHashTagEntity>,
+    @ManyToMany val links: List<PostgresLinkEntity>,
     @ManyToMany val mentions: List<PostgresUserEntity>,
 ) : PostgresPublicationEntity(
     id = id,
-    author = author,
 )
 
 @Entity
 @Table(name = "hash_tags")
-data class HashTagEntity(
+data class PostgresHashTagEntity(
     @Id
     val value: String
 )
 
 @Entity
 @Table(name = "links")
-data class LinkEntity(
+data class PostgresLinkEntity(
     @Id
     val url: String
 )

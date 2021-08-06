@@ -1,9 +1,9 @@
 package com.qohash.cabaneio2021.inserter.neo4j.entity
 
+import org.springframework.data.neo4j.core.schema.Id
 import org.springframework.data.neo4j.core.schema.Node
 import org.springframework.data.neo4j.core.schema.Relationship
 import java.util.*
-import javax.persistence.Id
 
 @Node("Publication")
 abstract class Neo4jPublicationEntity(

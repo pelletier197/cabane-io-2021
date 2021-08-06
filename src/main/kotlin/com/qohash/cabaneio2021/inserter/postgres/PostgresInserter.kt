@@ -2,6 +2,7 @@ package com.qohash.cabaneio2021.inserter.postgres
 
 import com.qohash.cabaneio2021.inserter.Inserter
 import com.qohash.cabaneio2021.inserter.TwitterModel
+import com.qohash.cabaneio2021.inserter.postgres.assembler.assemble
 import com.qohash.cabaneio2021.inserter.postgres.assembler.toPostgres
 import com.qohash.cabaneio2021.inserter.postgres.entity.PostgresUserEntity
 import com.qohash.cabaneio2021.model.post.Retweet
@@ -28,7 +29,7 @@ class PostgresInserter(
     private val repository: PostgresUserRepository,
 ) : Inserter {
     override fun insert(model: TwitterModel) {
-        repository.save(model.users.first().toPostgres(model))
+        repository.save(assemble(model).first())
         println(repository.findAll())
     }
 }

@@ -2,8 +2,6 @@ spring:
   main:
     web-application-type: none
     lazy-initialization: true
-  autoconfigure:
-    exclude: H
 
 
   # Neo4j

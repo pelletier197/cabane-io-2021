@@ -12,15 +12,31 @@ interface TwitterModel {
     val userTweetLikes: Map<User, Set<Tweet>>
     val userFollows: Map<User, Set<User>>
 
-    fun userPublications(user: User) : Set<Publication> {
-        return userTweets[user].orEmpty() + userRetweets[user].orEmpty()
+    fun allTweets() : List<Tweet> {
+        return userTweets.flatMap { it.value }
     }
 
-    fun userLikes(user: User) : Set<Tweet> {
+    fun allRetweets() : List<Retweet> {
+        return userRetweets.flatMap { it.value }
+    }
+
+    fun userPublications(user: User): Set<Publication> {
+        return userTweets(user) + userRetweets(user)
+    }
+
+    fun userTweets(user: User): Set<Tweet> {
+        return userTweets[user].orEmpty()
+    }
+
+    fun userRetweets(user: User): Set<Retweet> {
+        return userRetweets[user].orEmpty()
+    }
+
+    fun userLikes(user: User): Set<Tweet> {
         return userTweetLikes[user].orEmpty()
     }
 
-    fun userFollows(user: User) : Set<User> {
+    fun userFollows(user: User): Set<User> {
         return userFollows[user].orEmpty()
     }
 }
