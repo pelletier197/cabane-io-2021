@@ -56,7 +56,6 @@ fun Publication.toNeo4j(): Neo4jPublicationEntity {
     return when (this) {
         is Tweet -> toTweetEntity()
         is Retweet -> toRetweetEntity()
-        else -> throw Error("Unexpected object $this")
     }
 }
 

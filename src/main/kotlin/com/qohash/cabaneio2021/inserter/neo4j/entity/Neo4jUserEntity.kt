@@ -6,18 +6,18 @@ import java.time.Instant
 import java.util.*
 import javax.persistence.Id
 
-@Node("user")
+@Node("User")
 abstract class Neo4jUserEntity(
     @Id open val id: UUID,
     open val handle: String,
     open val name: String,
     open val joinDate: Instant,
-    @Relationship(type = "posted")
+    @Relationship(type = "POSTED")
     open val publications: List<Neo4jPublicationEntity>
 )
 
 
-@Node("individual")
+@Node("Individual")
 class Neo4jIndividualEntity(
     id: UUID,
     handle: String,
@@ -34,7 +34,7 @@ class Neo4jIndividualEntity(
     publications = publications
 )
 
-@Node("businesses")
+@Node("Business")
 class Neo4jBusinessEntity(
     id: UUID,
     handle: String,
