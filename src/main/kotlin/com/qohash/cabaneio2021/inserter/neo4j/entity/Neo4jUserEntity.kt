@@ -13,11 +13,7 @@ abstract class Neo4jUserEntity(
     open val name: String,
     open val joinDate: Instant,
     @Relationship(type = "POSTED")
-    open val publications: List<Neo4jPublicationEntity>,
-    @Relationship(type = "LIKES")
-    open val likedPublications: List<Neo4jTweetEntity>,
-    @Relationship(type = "FOLLOWS")
-    open val follows: List<Neo4jUserEntity>
+    open val publications: List<Neo4jPublicationEntity>
 )
 
 
@@ -28,8 +24,6 @@ class Neo4jIndividualEntity(
     name: String,
     joinDate: Instant,
     publications: List<Neo4jPublicationEntity>,
-    likedPublications: List<Neo4jTweetEntity>,
-    follows: List<Neo4jUserEntity>,
     val birthDate: Instant,
     val gender: String
 ) : Neo4jUserEntity(
@@ -37,9 +31,7 @@ class Neo4jIndividualEntity(
     handle = handle,
     name = name,
     joinDate = joinDate,
-    publications = publications,
-    likedPublications = likedPublications,
-    follows = follows,
+    publications = publications
 )
 
 @Node("Business")
@@ -49,8 +41,6 @@ class Neo4jBusinessEntity(
     name: String,
     joinDate: Instant,
     publications: List<Neo4jPublicationEntity>,
-    likedPublications: List<Neo4jTweetEntity>,
-    follows: List<Neo4jUserEntity>,
     val numberOfEmployees: Long,
     val phone: String?,
     val website: String?,
@@ -64,7 +54,5 @@ class Neo4jBusinessEntity(
     handle = handle,
     name = name,
     joinDate = joinDate,
-    publications = publications,
-    likedPublications = likedPublications,
-    follows = follows,
+    publications = publications
 )
