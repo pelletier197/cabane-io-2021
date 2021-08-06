@@ -2,7 +2,7 @@ package com.qohash.cabaneio2021.model.post
 
 import java.util.*
 
-interface Publication {
+sealed interface Publication {
     val id: PublicationId
 }
 
