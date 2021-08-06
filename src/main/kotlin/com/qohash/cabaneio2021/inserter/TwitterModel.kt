@@ -15,4 +15,12 @@ interface TwitterModel {
     fun userPublications(user: User) : Set<Publication> {
         return userTweets[user].orEmpty() + userRetweets[user].orEmpty()
     }
+
+    fun userLikes(user: User) : Set<Tweet> {
+        return userTweetLikes[user].orEmpty()
+    }
+
+    fun userFollows(user: User) : Set<User> {
+        return userFollows[user].orEmpty()
+    }
 }
