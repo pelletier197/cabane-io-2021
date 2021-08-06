@@ -19,7 +19,7 @@ import java.util.*
 private val faker = Faker()
 private val nonAlphabeticChars = Regex("[^A-Za-z0-9 ]")
 private val allHashTags = randomSetOf(size = 1000u) { faker.verbs.base() }
-private val allLinks = randomSetOf { URL("https://${faker.internet.domain()}") }
+private val allLinks = randomSetOf(size = 1000u) { URL("https://${faker.internet.domain()}") }
 
 fun randomUser(): User {
     return if (randomBoolean()) randomBusiness() else randomIndividual()
@@ -80,7 +80,7 @@ fun randomTweet(users: List<User>): Tweet {
     )
 }
 
-fun randomRetweet(users: List<User>, tweets: List<Tweet>): Retweet {
+fun randomRetweet(tweets: List<Tweet>): Retweet {
     return Retweet(
         id = PublicationId(UUID.randomUUID()),
         tweet = tweets.random()

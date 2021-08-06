@@ -23,7 +23,7 @@ class InsertCommand(
         key = ["insert-data"],
     )
     fun insertData(
-        @ShellOption(value = ["--count"], defaultValue = "10000") @Positive @Max(value = 100_000) count: UInt,
+        @ShellOption(value = ["--count"], defaultValue = "500") @Positive @Max(value = 100_000) count: UInt,
         @ShellOption(
             value = ["--inserters"],
             defaultValue = "$POSTGRES,$MONGO,$NEO4J,$ARANGO_DB",

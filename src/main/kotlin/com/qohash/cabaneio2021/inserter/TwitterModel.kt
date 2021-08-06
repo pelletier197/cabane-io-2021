@@ -39,4 +39,10 @@ interface TwitterModel {
     fun userFollows(user: User): Set<User> {
         return userFollows[user].orEmpty()
     }
+
+    fun printStatistics() {
+        println("users: ${users.size}")
+        println("tweets: ${allTweets().size}")
+        println("retweets: ${allRetweets().size}")
+    }
 }

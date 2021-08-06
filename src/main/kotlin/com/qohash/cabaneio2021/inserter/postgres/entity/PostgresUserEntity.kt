@@ -17,18 +17,17 @@ abstract class PostgresUserEntity(
     open val name: String,
     @Column(name = "join_date")
     open val joinDate: Instant,
-    // Unfortunately, one to many does not work when using the abstract class. We need the specific class :(
-    @OneToMany(cascade = [CascadeType.ALL])
-    open var tweets: List<PostgresTweetEntity>,
-    @OneToMany(cascade = [CascadeType.ALL])
-    open var retweets: List<PostgresRetweetEntity>,
-    @OneToMany(cascade = [CascadeType.ALL])
-    open var followsIndividual: List<PostgresIndividualEntity>,
-    @OneToMany(cascade = [CascadeType.ALL])
-    open var followsBusiness: List<PostgresBusinessEntity>,
-    @OneToMany(cascade = [CascadeType.ALL])
+    @OneToMany(cascade = [CascadeType.ALL], targetEntity = PostgresPublicationEntity::class)
+    open var publications: List<PostgresPublicationEntity>,
+    @ManyToMany(cascade = [CascadeType.MERGE], targetEntity = PostgresUserEntity::class)
+    open var follows: List<PostgresUserEntity>,
+    @ManyToMany(cascade = [CascadeType.MERGE])
     open var likes: List<PostgresTweetEntity>
-)
+) {
+    override fun toString(): String {
+        return "PostgresUserEntity(id=$id, handle='$handle', name='$name', joinDate=$joinDate)"
+    }
+}
 
 @Entity
 @Table(name = "individuals")
@@ -38,10 +37,8 @@ class PostgresIndividualEntity(
     handle: String,
     name: String,
     joinDate: Instant,
-    tweets: List<PostgresTweetEntity>,
-    retweets: List<PostgresRetweetEntity>,
-    followsIndividual: List<PostgresIndividualEntity>,
-    followsBusiness: List<PostgresBusinessEntity>,
+    publications: List<PostgresPublicationEntity>,
+    follows: List<PostgresUserEntity>,
     likes: List<PostgresTweetEntity>,
     @Column(name = "birth_date")
     val birthDate: Instant,
@@ -51,10 +48,8 @@ class PostgresIndividualEntity(
     handle = handle,
     name = name,
     joinDate = joinDate,
-    tweets = tweets,
-    retweets = retweets,
-    followsIndividual = followsIndividual,
-    followsBusiness = followsBusiness,
+    publications = publications,
+    follows = follows,
     likes = likes
 )
 
@@ -66,10 +61,8 @@ class PostgresBusinessEntity(
     handle: String,
     name: String,
     joinDate: Instant,
-    tweets: List<PostgresTweetEntity>,
-    retweets: List<PostgresRetweetEntity>,
-    followsIndividual: List<PostgresIndividualEntity>,
-    followsBusiness: List<PostgresBusinessEntity>,
+    publications: List<PostgresPublicationEntity>,
+    follows: List<PostgresUserEntity>,
     likes: List<PostgresTweetEntity>,
     @Column(name = "number_of_employees")
     val numberOfEmployees: Long,
@@ -89,9 +82,7 @@ class PostgresBusinessEntity(
     handle = handle,
     name = name,
     joinDate = joinDate,
-    tweets = tweets,
-    retweets = retweets,
-    followsIndividual = followsIndividual,
-    followsBusiness = followsBusiness,
+    publications = publications,
+    follows = follows,
     likes = likes
 )
