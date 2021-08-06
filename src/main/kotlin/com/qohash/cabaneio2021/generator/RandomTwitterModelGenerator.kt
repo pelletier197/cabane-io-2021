@@ -1,13 +1,14 @@
 package com.qohash.cabaneio2021.generator
 
+import com.qohash.cabaneio2021.inserter.AbstractTwitterModel
 import com.qohash.cabaneio2021.inserter.TwitterModel
 import com.qohash.cabaneio2021.model.post.Retweet
 import com.qohash.cabaneio2021.model.post.Tweet
 import com.qohash.cabaneio2021.model.user.User
 
-private data class RandomTwitterModel(
+private class RandomTwitterModel(
     val usersCount: UInt,
-) : TwitterModel {
+) : AbstractTwitterModel() {
     private val maxTweetsPerUser = 30u
     private val maxRetweetsPerUser = 90u
     private val maxLikesPerUser = 100u
@@ -27,7 +28,7 @@ private data class RandomTwitterModel(
     override val userRetweets: Map<User, Set<Retweet>> by lazy {
         usersList.associateWith {
             randomSetOf(size = randomUInt(max = maxRetweetsPerUser)) {
-                randomRetweet(allTweets())
+                randomRetweet(allTweets)
             }
         }
     }

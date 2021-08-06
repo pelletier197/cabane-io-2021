@@ -11,14 +11,8 @@ interface TwitterModel {
     val userRetweets: Map<User, Set<Retweet>>
     val userTweetLikes: Map<User, Set<Tweet>>
     val userFollows: Map<User, Set<User>>
-
-    fun allTweets() : List<Tweet> {
-        return userTweets.flatMap { it.value }
-    }
-
-    fun allRetweets() : List<Retweet> {
-        return userRetweets.flatMap { it.value }
-    }
+    val allTweets: List<Tweet>
+    val allRetweets: List<Retweet>
 
     fun userPublications(user: User): Set<Publication> {
         return userTweets(user) + userRetweets(user)
@@ -39,10 +33,10 @@ interface TwitterModel {
     fun userFollows(user: User): Set<User> {
         return userFollows[user].orEmpty()
     }
+}
 
-    fun printStatistics() {
-        println("users: ${users.size}")
-        println("tweets: ${allTweets().size}")
-        println("retweets: ${allRetweets().size}")
-    }
+abstract class AbstractTwitterModel : TwitterModel {
+    override val allTweets: List<Tweet> by lazy { userTweets.flatMap { it.value } }
+
+    override val allRetweets: List<Retweet> by lazy { userRetweets.flatMap { it.value } }
 }

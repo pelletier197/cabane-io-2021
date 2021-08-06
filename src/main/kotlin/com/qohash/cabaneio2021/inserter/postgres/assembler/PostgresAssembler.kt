@@ -13,20 +13,15 @@ import java.util.*
 
 fun assemble(model: TwitterModel): List<PostgresUserEntity> {
     val postgresUsers = model.users.map { it.toPostgres() }
-    println("mapped postgres users")
     val postgresUsersById = postgresUsers.associateBy { it.id }
-    println("users by id")
-    val postgresTweets = model.allTweets().toPostgres(postgresUsersById)
-    println("tweets")
+
+    val postgresTweets = model.allTweets.toPostgres(postgresUsersById)
     val postgresTweetsById = postgresTweets.associateBy { it.id }
-    println("tweet by id")
-    val allRetweets = model.allRetweets().toPostgres(postgresTweetsById)
-    println("retweets")
+
+    val allRetweets = model.allRetweets.toPostgres(postgresTweetsById)
     val postgresRetweetsById = allRetweets.associateBy { it.id }
-    println("retweets by id")
 
     setUserRelations(model, postgresUsersById, postgresTweetsById, postgresRetweetsById)
-    println("set relations")
 
     return postgresUsers
 }

@@ -23,7 +23,7 @@ spring:
         event:
           merge:
             entity_copy_observer: allow
-    show-sql: true
+    show-sql: false # turn on if wished
   datasource:
     url: jdbc:postgresql://localhost:5432/cabaneio
     username: postgres
@@ -40,3 +40,6 @@ spring:
     arangodb:
       user: root
       password: cabaneio2021
+logging:
+  level:
+    org.hibernate.engine.internal.StatisticalLoggingSessionEventListener: TRACE
