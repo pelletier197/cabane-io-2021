@@ -11,11 +11,7 @@ import com.qohash.cabaneio2021.model.user.Business
 import com.qohash.cabaneio2021.model.user.Individual
 import com.qohash.cabaneio2021.model.user.User
 
-fun Collection<User>.toNeo4jUsers(model: TwitterModel): List<Neo4jUserEntity> {
-    return orEmpty().map { it.toNeo4jUser(model) }
-}
-
-fun User.toNeo4jUser(model: TwitterModel): Neo4jUserEntity {
+fun User.toNeo4j(model: TwitterModel): Neo4jUserEntity {
     return when (this) {
         is Individual -> toIndividualEntity(model)
         is Business -> toBusinessEntity(model)
@@ -30,9 +26,7 @@ fun Individual.toIndividualEntity(model: TwitterModel): Neo4jIndividualEntity {
         joinDate = joinDate,
         birthDate = birthDate,
         gender = gender,
-        publications = model.userPublications(this).toNeo4jPublications(),
-        likedPublications = model.userLikes(this).map { it.toTweetEntity() },
-        follows = model.userFollows(this).toNeo4jUsers(model)
+        publications = model.userPublications(this).toNeo4j(),
     )
 }
 
@@ -50,17 +44,15 @@ fun Business.toBusinessEntity(model: TwitterModel): Neo4jBusinessEntity {
         locationCity = contactInformation.location?.city,
         locationCountry = contactInformation.location?.country,
         verified = verified,
-        publications = model.userPublications(this).toNeo4jPublications(),
-        likedPublications = model.userLikes(this).map { it.toTweetEntity() },
-        follows = model.userFollows(this).toNeo4jUsers(model)
+        publications = model.userPublications(this).toNeo4j(),
     )
 }
 
-fun Collection<Publication>.toNeo4jPublications(): List<Neo4jPublicationEntity> {
-    return orEmpty().map { it.toNeo4jPublication() }
+fun Collection<Publication>.toNeo4j(): List<Neo4jPublicationEntity> {
+    return orEmpty().map { it.toNeo4j() }
 }
 
-fun Publication.toNeo4jPublication(): Neo4jPublicationEntity {
+fun Publication.toNeo4j(): Neo4jPublicationEntity {
     return when (this) {
         is Tweet -> toTweetEntity()
         is Retweet -> toRetweetEntity()
