@@ -17,7 +17,7 @@ abstract class PostgresUserEntity(
     open val name: String,
     @Column(name = "join_date")
     open val joinDate: Instant,
-    @OneToMany(cascade = [CascadeType.ALL], targetEntity = PostgresPublicationEntity::class)
+    @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE], targetEntity = PostgresPublicationEntity::class)
     open var publications: List<PostgresPublicationEntity>,
     @ManyToMany(cascade = [CascadeType.MERGE], targetEntity = PostgresUserEntity::class)
     open var follows: List<PostgresUserEntity>,

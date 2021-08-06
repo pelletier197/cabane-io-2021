@@ -23,7 +23,7 @@ spring:
         event:
           merge:
             entity_copy_observer: allow
-    show-sql: false # turn on if wished
+    show-sql: true # turn on if wished
   datasource:
     url: jdbc:postgresql://localhost:5432/cabaneio
     username: postgres

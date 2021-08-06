@@ -25,22 +25,20 @@ private class RandomTwitterModel(
         }
     }
 
-    override val userRetweets: Map<User, Set<Retweet>> by lazy {
-        usersList.associateWith {
-            randomSetOf(size = randomUInt(max = maxRetweetsPerUser)) {
-                randomRetweet(allTweets)
-            }
+    override val userRetweets: Map<User, Set<Retweet>> = usersList.associateWith {
+        randomSetOf(size = randomUInt(max = maxRetweetsPerUser)) {
+            randomRetweet(allTweets)
         }
     }
 
-    override val userTweetLikes: Map<User, Set<Tweet>> by lazy {
+    override val userTweetLikes: Map<User, Set<Tweet>> = run {
         val userTweetEntries = userTweets.entries.toList()
-
         usersList.associateWith {
             (0u..randomUInt(max = maxLikesPerUser)).mapNotNullTo(HashSet()) { userTweetEntries.random().value.randomOrNull() }
         }
     }
-    override val userFollows: Map<User, Set<User>> by lazy {
+
+    override val userFollows: Map<User, Set<User>> = run {
         usersList.associateWith {
             (0u..randomUInt(maxFollowPerUser)).mapTo(HashSet()) { usersList.random() } - it // Can't follow yourself
         }

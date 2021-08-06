@@ -23,6 +23,5 @@ class PostgresInserter(
     override fun insert(model: TwitterModel) {
         val postgresModel = assemble(model)
         repository.saveAll(postgresModel)
-        println(repository.findAll())
     }
 }

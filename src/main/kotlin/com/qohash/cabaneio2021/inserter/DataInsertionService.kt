@@ -1,6 +1,7 @@
 package com.qohash.cabaneio2021.inserter
 
 import com.qohash.cabaneio2021.generator.randomTwitterModel
+import com.qohash.cabaneio2021.print.insertWithPrintedStatistics
 import com.qohash.cabaneio2021.print.printSeparator
 import com.qohash.cabaneio2021.print.printStatistics
 import org.springframework.beans.factory.annotation.BeanFactoryAnnotationUtils
@@ -21,7 +22,9 @@ class DataInsertionService(
         model.printStatistics()
         printSeparator()
 
-        inserters.forEach { it.insert(model) }
+        inserters.forEach {
+            it.insertWithPrintedStatistics(model)
+        }
     }
 
     private fun findInserters(inserterNames: Set<String>): List<Inserter> {
