@@ -40,6 +40,9 @@ class PostgresIndividualEntity(
     joinDate: Instant,
     tweets: List<PostgresTweetEntity>,
     retweets: List<PostgresRetweetEntity>,
+    followsIndividual: List<PostgresIndividualEntity>,
+    followsBusiness: List<PostgresBusinessEntity>,
+    likes: List<PostgresTweetEntity>,
     @Column(name = "birth_date")
     val birthDate: Instant,
     val gender: String
@@ -50,6 +53,9 @@ class PostgresIndividualEntity(
     joinDate = joinDate,
     tweets = tweets,
     retweets = retweets,
+    followsIndividual = followsIndividual,
+    followsBusiness = followsBusiness,
+    likes = likes
 )
 
 @Entity
@@ -62,6 +68,9 @@ class PostgresBusinessEntity(
     joinDate: Instant,
     tweets: List<PostgresTweetEntity>,
     retweets: List<PostgresRetweetEntity>,
+    followsIndividual: List<PostgresIndividualEntity>,
+    followsBusiness: List<PostgresBusinessEntity>,
+    likes: List<PostgresTweetEntity>,
     @Column(name = "number_of_employees")
     val numberOfEmployees: Long,
     val phone: String?,
@@ -82,4 +91,7 @@ class PostgresBusinessEntity(
     joinDate = joinDate,
     tweets = tweets,
     retweets = retweets,
+    followsIndividual = followsIndividual,
+    followsBusiness = followsBusiness,
+    likes = likes
 )

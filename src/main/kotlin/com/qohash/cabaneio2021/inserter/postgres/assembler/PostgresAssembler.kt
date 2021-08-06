@@ -78,6 +78,9 @@ fun Individual.toIndividualEntity(): PostgresIndividualEntity {
         gender = gender,
         tweets = emptyList(),
         retweets = emptyList(),
+        followsIndividual = emptyList(),
+        followsBusiness = emptyList(),
+        likes = emptyList(),
     )
 }
 
@@ -97,6 +100,9 @@ fun Business.toBusinessEntity(): PostgresBusinessEntity {
         verified = verified,
         tweets = emptyList(),
         retweets = emptyList(),
+        followsIndividual = emptyList(),
+        followsBusiness = emptyList(),
+        likes = emptyList(),
     )
 }
 
