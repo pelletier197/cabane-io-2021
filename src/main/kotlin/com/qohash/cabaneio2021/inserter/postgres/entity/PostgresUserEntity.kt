@@ -17,10 +17,17 @@ abstract class PostgresUserEntity(
     open val name: String,
     @Column(name = "join_date")
     open val joinDate: Instant,
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "author")
+    // Unfortunately, one to many does not work when using the abstract class. We need the specific class :(
+    @OneToMany(cascade = [CascadeType.ALL])
     open var tweets: List<PostgresTweetEntity>,
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "author")
+    @OneToMany(cascade = [CascadeType.ALL])
     open var retweets: List<PostgresRetweetEntity>,
+    @OneToMany(cascade = [CascadeType.ALL])
+    open var followsIndividual: List<PostgresIndividualEntity>,
+    @OneToMany(cascade = [CascadeType.ALL])
+    open var followsBusiness: List<PostgresBusinessEntity>,
+    @OneToMany(cascade = [CascadeType.ALL])
+    open var likes: List<PostgresTweetEntity>
 )
 
 @Entity

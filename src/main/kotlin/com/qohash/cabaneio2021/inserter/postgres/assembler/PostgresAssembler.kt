@@ -14,7 +14,6 @@ import java.util.*
 
 fun assemble(model: TwitterModel): List<PostgresUserEntity> {
     val postgresUsers = model.users.map { it.toPostgres() }
-    val usersById = model.users.associateBy { it.id.value }
     val postgresUsersById = postgresUsers.associateBy { it.id }
 
     val postgresTweets = model.allTweets().toPostgres(postgresUsersById)
@@ -23,6 +22,9 @@ fun assemble(model: TwitterModel): List<PostgresUserEntity> {
     val postgresRetweetsById = allRetweets.associateBy { it.id }
 
     setUsersPublications(model, postgresUsersById, postgresTweetsById, postgresRetweetsById)
+    setUserFollows(model, postgresUsersById)
+    setUserLikes(model, postgresUsersById, postgresTweetsById)
+
     return postgresUsers
 }
 
@@ -36,6 +38,26 @@ fun setUsersPublications(
         val postgresUser = postgresUsersById[it.id.value]!!
         postgresUser.tweets = model.userTweets(it).map { tweet -> postgresTweetsById[tweet.id.value]!! }
         postgresUser.retweets = model.userRetweets(it).map { retweet -> postgresRetweetsById[retweet.id.value]!! }
+    }
+}
+
+fun setUserFollows(model: TwitterModel, postgresUsersById: Map<UUID, PostgresUserEntity>) {
+    model.users.forEach {
+        val postgresUser = postgresUsersById[it.id.value]!!
+        val follows = model.userFollows(it).map { followed -> postgresUsersById[followed.id.value]!! }
+        postgresUser.followsIndividual = follows.filterIsInstance<PostgresIndividualEntity>()
+        postgresUser.followsBusiness = follows.filterIsInstance<PostgresBusinessEntity>()
+    }
+}
+
+fun setUserLikes(
+    model: TwitterModel,
+    postgresUsersById: Map<UUID, PostgresUserEntity>,
+    postgresTweetsById: Map<UUID, PostgresTweetEntity>
+) {
+    model.users.forEach {
+        val postgresUser = postgresUsersById[it.id.value]!!
+        postgresUser.likes = model.userLikes(it).map { postgresTweetsById[it.id.value]!! }
     }
 }
 
