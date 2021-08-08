@@ -2,9 +2,8 @@ package com.qohash.cabaneio2021.inserter.neo4j
 
 import com.qohash.cabaneio2021.inserter.Inserter
 import com.qohash.cabaneio2021.inserter.TwitterModel
-import com.qohash.cabaneio2021.inserter.neo4j.assembler.toNeo4jPublications
-import com.qohash.cabaneio2021.inserter.neo4j.assembler.toNeo4jUser
 import com.qohash.cabaneio2021.inserter.neo4j.entity.Neo4jUserEntity
+import com.qohash.cabaneio2021.inserter.neo4j.assembler.assemble
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.neo4j.repository.Neo4jRepository
 import org.springframework.stereotype.Component
@@ -20,9 +19,7 @@ class Neo4jInserter(
     private val repository: Neo4jUserRepository,
 ) : Inserter {
     override fun insert(model: TwitterModel) {
-        model.users.forEach {
-            repository.save(it.toNeo4jUser(model))
-        }
-        println(repository.findAll())
+        val neo4jModel = assemble(model)
+        repository.saveAll(neo4jModel)
     }
 }
