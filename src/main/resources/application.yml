@@ -39,4 +39,4 @@ spring:
       password: cabaneio2021
 logging:
   level:
-    org.springframework.data.neo4j: TRACE
+    org.springframework.data.neo4j: DEBUG
