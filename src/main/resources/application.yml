@@ -23,7 +23,7 @@ spring:
         event:
           merge:
             entity_copy_observer: allow
-    show-sql: true # turn on if wished
+    show-sql: false # turn on if wished
   datasource:
     url: jdbc:postgresql://localhost:5432/cabaneio
     username: postgres
@@ -42,4 +42,4 @@ spring:
       password: cabaneio2021
 logging:
   level:
-    org.springframework.data.neo4j: DEBUG
+    org.springframework.data.neo4j: INFO
