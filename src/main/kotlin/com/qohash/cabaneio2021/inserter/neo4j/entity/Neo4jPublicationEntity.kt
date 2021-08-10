@@ -13,7 +13,7 @@ abstract class Neo4jPublicationEntity(
 )
 
 @Node("Retweet")
-class Neo4jRetweetEntity @PersistenceConstructor constructor(
+class Neo4jRetweetEntity(
     id: UUID,
     @Relationship(type = "RETWEETS") val tweet: Neo4jTweetEntity,
 ) : Neo4jPublicationEntity(
@@ -22,13 +22,13 @@ class Neo4jRetweetEntity @PersistenceConstructor constructor(
 
 
 @Node("Tweet")
-class Neo4jTweetEntity @PersistenceConstructor constructor(
+class Neo4jTweetEntity (
     id: UUID,
     val text: String,
     val sourceName: String,
     @Relationship(type = "HAS_TAG") var hashTags: List<Neo4jHashTagEntity>,
     @Relationship(type = "HAS_LINK") var links: List<Neo4jLinkEntity>,
-    @Relationship(type = "MENTIONS") var mentions: List<Neo4jUserEntity>,
+//    @Relationship(type = "MENTIONS") var mentions: List<Neo4jUserEntity>,
 ) : Neo4jPublicationEntity(
     id = id,
 )
