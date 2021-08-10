@@ -8,6 +8,7 @@ import com.qohash.cabaneio2021.inserter.TwitterModel
 import com.qohash.cabaneio2021.inserter.neo4j.assembler.*
 import com.qohash.cabaneio2021.inserter.neo4j.entity.*
 import net.bytebuddy.utility.RandomString
+import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.neo4j.core.Neo4jClient
 import org.springframework.data.neo4j.repository.Neo4jRepository
@@ -50,7 +51,7 @@ data class UserLike(
 class Neo4jInserter(
     private val client: Neo4jClient,
     private val mapper: ObjectMapper
-) : Inserter {
+) : Inserter, InitializingBean {
     override fun insert(model: TwitterModel) {
         val users = model.users.map { it.toNeo4j() }
         val result = client.query(
@@ -75,8 +76,8 @@ class Neo4jInserter(
                 periodicIterate(
                     fetchQuery = "UNWIND $${"tweets"} AS tweet RETURN tweet",
                     callback = """
+                            MATCH (user:User {id: tweet.authorId})
                             CREATE (tweetNode:Tweet:Publication) SET tweetNode = tweet.tweet
-                            MERGE (user:User {id: tweet.authorId})
                             CREATE (user)-[:POSTED]->(tweetNode)
                             
                             FOREACH (userId IN tweet.mentionUserIds | 
@@ -85,15 +86,16 @@ class Neo4jInserter(
                             )
                             
                             FOREACH(tag IN tweet.hashTags | 
-                                MERGE (tagNode:HashTag) SET tagNode = tag
+                                MERGE (tagNode:HashTag {value: tag.value})
                                 CREATE (tweetNode)-[:HAS_TAG]->(tagNode)
                             )
                             
                            FOREACH(link IN tweet.links | 
-                                MERGE (linkNode:Link) SET linkNode = link
+                                MERGE (linkNode:Link {url: link.url }) 
                             )
                             
-                            MERGE (sourceNode:Source) SET sourceNode = tweet.source
+                            MERGE (sourceNode:Source {name: tweet.source})
+                            CREATE (tweet)-[:POSTED_VIA]->(sourceNode)
                     """,
                     params = "{ tweets: $${"tweets"} }",
                     batchSize = 25
@@ -104,8 +106,8 @@ class Neo4jInserter(
                 periodicIterate(
                     fetchQuery = "UNWIND $${"retweets"} AS retweet RETURN retweet",
                     callback = """
+                        MATCH (author:User { id: retweet.authorId })
                         CREATE (retweetNode:Retweet:Publication) SET retweetNode = retweet.retweet
-                        MERGE (author:User { id: retweet.authorId })
                         CREATE (author)-[:POSTED]->(retweetNode)
                     """,
                     params = "{ retweets: $${"retweets"} }"
@@ -116,8 +118,8 @@ class Neo4jInserter(
                 periodicIterate(
                     fetchQuery = "UNWIND $${"userLikes"} AS like RETURN like",
                     callback = """
-                        MERGE (user:User { id: like.userId })
-                        MERGE (tweet:Tweet { id: like.tweetId })
+                        MATCH (user:User { id: like.userId })
+                        MATCH (tweet:Tweet { id: like.tweetId })
                         CREATE (user)-[:LIKES]->(tweet)
                     """,
                     params = "{ userLikes: $${"userLikes"} }"
@@ -128,8 +130,8 @@ class Neo4jInserter(
                 periodicIterate(
                     fetchQuery = "UNWIND $${"userFollows"} AS follow RETURN follow",
                     callback = """
-                        MERGE (user:User { id: follow.followerId })
-                        MERGE (followed:User { id: follow.followedId })
+                        MATCH (user:User { id: follow.followerId })
+                        MATCH (followed:User { id: follow.followedId })
                         CREATE (user)-[:FOLLOWS]->(followed)
                     """,
                     params = "{ userFollows: $${"userFollows"} }"
@@ -151,6 +153,16 @@ class Neo4jInserter(
 
         val summary = result.counters()
         println("created ${summary.nodesCreated()} nodes and ${summary.relationshipsCreated()} relationships in Neo4j")
+    }
+
+    override fun afterPropertiesSet() {
+        client.query("""
+           CREATE CONSTRAINT user_id_unique IF NOT EXISTS ON (user:User) ASSERT user.id IS UNIQUE
+           CREATE CONSTRAINT publication_id_unique IF NOT EXISTS ON (publication:Publication) ASSERT publication.id IS UNIQUE
+           CREATE CONSTRAINT link_url_unique IF NOT EXISTS ON (link:Link) ASSERT link.url IS UNIQUE
+           CREATE CONSTRAINT hashtag_value_unique IF NOT EXISTS ON (hashTag:HashTag) ASSERT hashTag.value IS UNIQUE
+           CREATE CONSTRAINT source_value_unique IF NOT EXISTS ON (source:Source) ASSERT source.name IS UNIQUE
+        """).run()
     }
 
     private fun periodicIterate(

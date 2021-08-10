@@ -18,36 +18,6 @@ import com.qohash.cabaneio2021.model.user.UserId
 import java.util.*
 import kotlin.collections.HashSet
 
-//fun assemble(model: TwitterModel): List<Neo4jUserEntity> {
-//    val neo4jUsers = model.users.map { it.toNeo4j() }
-//    val neo4jUsersById = neo4jUsers.associateBy { it.id }
-//
-//    val neo4jTweets = model.allTweets.toNeo4j(neo4jUsersById)
-//    val neo4jTweetsById = neo4jTweets.associateBy { it.id }
-//
-//    val allRetweets = model.allRetweets.toNeo4j(neo4jTweetsById)
-//    val neo4jRetweetsById = allRetweets.associateBy { it.id }
-//
-//    setUserRelations(model, neo4jUsersById, neo4jTweetsById, neo4jRetweetsById)
-//
-//    return neo4jUsers
-//}
-
-fun setUserRelations(
-    model: TwitterModel,
-    neo4jUsersById: Map<UUID, Neo4jUserEntity>,
-    neo4jTweetsById: Map<UUID, Neo4jTweetEntity>,
-    neo4jRetweetsById: Map<UUID, Neo4jRetweetEntity>,
-) {
-    model.users.forEach {
-        val neo4jUser = neo4jUsersById[it.id.value]!!
-//        neo4jUser.publications += model.userTweets(it).map { tweet -> neo4jTweetsById[tweet.id.value]!! }
-//        neo4jUser.publications += model.userRetweets(it).map { retweet -> neo4jRetweetsById[retweet.id.value]!! }
-//        neo4jUser.follows = model.userFollows(it).map { followed -> neo4jUsersById[followed.id.value]!! }
-//        neo4jUser.likes = model.userLikes(it).map { like -> neo4jTweetsById[like.id.value]!! }
-    }
-}
-
 fun User.toNeo4j(): Neo4jUserEntity {
     return when (this) {
         is Individual -> toIndividualEntity()
@@ -82,13 +52,6 @@ fun Business.toBusinessEntity(): Neo4jBusinessEntity {
         verified = verified,
     )
 }
-
-//@JvmName("userTweetsToNeo4j")
-//fun Collection<Tweet>.toNeo4j(
-//    neo4jUsersById: Map<UUID, Neo4jUserEntity>,
-//): List<Neo4jTweetEntity> {
-//    return map { it.toNeo4j(neo4jUsersById) }
-//}
 
 fun Map<User, Set<Tweet>>.toNeo4jTweets(): List<TweetImport> {
     return flatMap { (user, tweets) ->
@@ -145,9 +108,6 @@ fun Tweet.toNeo4j(): Neo4jTweetEntity {
         id = id.value,
         text = text,
         sourceName = source.name,
-//        hashTags = hashtags.toNeo4j(),
-//        links = links.toNeo4j(),
-//        mentions = mentions.map { neo4jUsersById[it.id.value]!! }
     )
 }
 
