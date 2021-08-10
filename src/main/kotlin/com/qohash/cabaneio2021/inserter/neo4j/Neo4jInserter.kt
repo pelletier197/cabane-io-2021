@@ -7,6 +7,7 @@ import com.qohash.cabaneio2021.inserter.Inserter
 import com.qohash.cabaneio2021.inserter.TwitterModel
 import com.qohash.cabaneio2021.inserter.neo4j.assembler.*
 import com.qohash.cabaneio2021.inserter.neo4j.entity.*
+import net.bytebuddy.utility.RandomString
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.neo4j.core.Neo4jClient
 import org.springframework.data.neo4j.repository.Neo4jRepository
@@ -54,53 +55,87 @@ class Neo4jInserter(
         val users = model.users.map { it.toNeo4j() }
         val result = client.query(
             """
-            FOREACH(business IN $${"businesses"} | 
-                CREATE (businessNode:Business:User) SET businessNode = business 
-            )
-            
-            FOREACH(individual IN $${"individuals"} | 
-                CREATE (individualNode:Individual:User) SET individualNode = individual
-            )
-            
-            FOREACH(tweet IN $${"tweets"} | 
-                CREATE (tweetNode:Tweet:Publication) SET tweetNode = tweet.tweet
-                MERGE (user:User {id: tweet.authorId})
-                CREATE (user)-[:POSTED]->(tweetNode)
-                
-                FOREACH (userId IN tweet.mentionUserIds | 
-                    MERGE (mentioned:User { id: userId })
-                    CREATE (tweetNode)-[:MENTIONS]->(mentioned)
+            ${
+                periodicIterate(
+                    fetchQuery = "UNWIND $${"businesses"} AS business RETURN business",
+                    callback = "CREATE (businessNode:Business:User) SET businessNode = business",
+                    params = "{ businesses: $${"businesses"} }"
                 )
-                
-                FOREACH(tag IN tweet.hashTags | 
-                    MERGE (tagNode:HashTag) SET tagNode = tag
-                    CREATE (tweetNode)-[:HAS_TAG]->(tagNode)
+            }
+            
+            ${
+                periodicIterate(
+                    fetchQuery = "UNWIND $${"individuals"} AS individual RETURN individual",
+                    callback = "CREATE (individualNode:Individual:User) SET individualNode = individual",
+                    params = "{ individuals: $${"individuals"} }"
                 )
-                
-               FOREACH(link IN tweet.links | 
-                    MERGE (linkNode:Link) SET linkNode = link
+            }
+            
+            ${
+                periodicIterate(
+                    fetchQuery = "UNWIND $${"tweets"} AS tweet RETURN tweet",
+                    callback = """
+                            CREATE (tweetNode:Tweet:Publication) SET tweetNode = tweet.tweet
+                            MERGE (user:User {id: tweet.authorId})
+                            CREATE (user)-[:POSTED]->(tweetNode)
+                            
+                            FOREACH (userId IN tweet.mentionUserIds | 
+                                MERGE (mentioned:User { id: userId })
+                                CREATE (tweetNode)-[:MENTIONS]->(mentioned)
+                            )
+                            
+                            FOREACH(tag IN tweet.hashTags | 
+                                MERGE (tagNode:HashTag) SET tagNode = tag
+                                CREATE (tweetNode)-[:HAS_TAG]->(tagNode)
+                            )
+                            
+                           FOREACH(link IN tweet.links | 
+                                MERGE (linkNode:Link) SET linkNode = link
+                            )
+                            
+                            MERGE (sourceNode:Source) SET sourceNode = tweet.source
+                    """,
+                    params = "{ tweets: $${"tweets"} }"
                 )
-                
-                MERGE (sourceNode:Source) SET sourceNode = tweet.source
-            )
+            }
+
+            ${
+                periodicIterate(
+                    fetchQuery = "UNWIND $${"retweets"} AS retweet RETURN retweet",
+                    callback = """
+                        CREATE (retweetNode:Retweet:Publication) SET retweetNode = retweet.retweet
+                        MERGE (author:User { id: retweet.authorId })
+                        CREATE (author)-[:POSTED]->(retweetNode)
+                    """,
+                    params = "{ retweets: $${"retweets"} }"
+                )
+            }
             
-            FOREACH(retweet IN $${"retweets"} | 
-                CREATE (retweetNode:Retweet:Publication) SET retweetNode = retweet.retweet
-                MERGE (author:User { id: retweet.authorId })
-                CREATE (author)-[:POSTED]->(retweetNode)
-            )
+            ${
+                periodicIterate(
+                    fetchQuery = "UNWIND $${"userLikes"} AS like RETURN like",
+                    callback = """
+                        MERGE (user:User { id: like.userId })
+                        MERGE (tweet:Tweet { id: like.tweetId })
+                        CREATE (user)-[:LIKES]->(tweet)
+                    """,
+                    params = "{ userLikes: $${"userLikes"} }"
+                )
+            }
             
-            FOREACH(like IN $${"userLikes"} | 
-                MERGE (user:User { id: like.userId })
-                MERGE (tweet:Tweet { id: like.tweetId })
-                CREATE (user)-[:LIKES]->(tweet)
-            )
+            ${
+                periodicIterate(
+                    fetchQuery = "UNWIND $${"userFollows"} AS follow RETURN follow",
+                    callback = """
+                        MERGE (user:User { id: follow.followerId })
+                        MERGE (followed:User { id: follow.followedId })
+                        CREATE (user)-[:FOLLOWS]->(followed)
+                    """,
+                    params = "{ userFollows: $${"userFollows"} }"
+                )
+            }
             
-            FOREACH(follow IN $${"userFollows"} | 
-                MERGE (user:User { id: follow.followerId })
-                MERGE (followed:User { id: follow.followedId })
-                CREATE (user)-[:FOLLOWS]->(followed)
-            )
+            RETURN true
         """
         ).bindAll(
             mapOf(
@@ -114,6 +149,22 @@ class Neo4jInserter(
         ).run()
 
         val summary = result.counters()
-        println("created ${summary.nodesCreated()} nodes and ${summary.relationshipsCreated()} relationships")
+        println("created ${summary.nodesCreated()} nodes and ${summary.relationshipsCreated()} relationships in Neo4j")
+    }
+
+    private fun periodicIterate(
+        fetchQuery: String,
+        callback: String,
+        params: String
+    ): String {
+        val randomVariableLetters: List<Char> = ('A'..'Z').toList()
+        val randomVariable = (1..10).map { randomVariableLetters.random() }.joinToString(separator = "")
+        return """
+            CALL apoc.periodic.iterate(
+                '$fetchQuery', 
+                '$callback',
+                {batchSize: 50, parallel: true, params: $params}
+            ) YIELD total AS $randomVariable
+        """.trimIndent()
     }
 }
