@@ -34,10 +34,10 @@ fun setUserRelations(
 ) {
     model.users.forEach {
         val neo4jUser = neo4jUsersById[it.id.value]!!
-        neo4jUser.publications += model.userTweets(it).map { tweet -> neo4jTweetsById[tweet.id.value]!! }
-        neo4jUser.publications += model.userRetweets(it).map { retweet -> neo4jRetweetsById[retweet.id.value]!! }
+//        neo4jUser.publications += model.userTweets(it).map { tweet -> neo4jTweetsById[tweet.id.value]!! }
+//        neo4jUser.publications += model.userRetweets(it).map { retweet -> neo4jRetweetsById[retweet.id.value]!! }
         neo4jUser.follows = model.userFollows(it).map { followed -> neo4jUsersById[followed.id.value]!! }
-        neo4jUser.likes = model.userLikes(it).map { like -> neo4jTweetsById[like.id.value]!! }
+//        neo4jUser.likes = model.userLikes(it).map { like -> neo4jTweetsById[like.id.value]!! }
     }
 }
 

@@ -19,7 +19,7 @@ abstract class PostgresUserEntity(
     open val joinDate: Instant,
     @OneToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE], targetEntity = PostgresPublicationEntity::class)
     open var publications: List<PostgresPublicationEntity>,
-    @ManyToMany(cascade = [CascadeType.MERGE], targetEntity = PostgresUserEntity::class)
+    @ManyToMany(cascade = [], targetEntity = PostgresUserEntity::class)
     open var follows: List<PostgresUserEntity>,
     @ManyToMany(cascade = [CascadeType.MERGE])
     open var likes: List<PostgresTweetEntity>

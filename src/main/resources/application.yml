@@ -20,9 +20,6 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false # Allow avoiding to query database at startup for metadata
-        event:
-          merge:
-            entity_copy_observer: allow
     show-sql: true # turn on if wished
   datasource:
     url: jdbc:postgresql://localhost:5432/cabaneio
@@ -42,4 +39,4 @@ spring:
       password: cabaneio2021
 logging:
   level:
-    org.hibernate.engine.internal.StatisticalLoggingSessionEventListener: TRACE
+    org.springframework.data.neo4j: DEBUG

@@ -11,21 +11,6 @@ import com.qohash.cabaneio2021.model.user.Individual
 import com.qohash.cabaneio2021.model.user.User
 import java.util.*
 
-fun assemble(model: TwitterModel): List<PostgresUserEntity> {
-    val postgresUsers = model.users.map { it.toPostgres() }
-    val postgresUsersById = postgresUsers.associateBy { it.id }
-
-    val postgresTweets = model.allTweets.toPostgres(postgresUsersById)
-    val postgresTweetsById = postgresTweets.associateBy { it.id }
-
-    val allRetweets = model.allRetweets.toPostgres(postgresTweetsById)
-    val postgresRetweetsById = allRetweets.associateBy { it.id }
-
-    setUserRelations(model, postgresUsersById, postgresTweetsById, postgresRetweetsById)
-
-    return postgresUsers
-}
-
 fun setUserRelations(
     model: TwitterModel,
     postgresUsersById: Map<UUID, PostgresUserEntity>,

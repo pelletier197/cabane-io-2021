@@ -6,11 +6,17 @@ import com.qohash.cabaneio2021.print.printSeparator
 import com.qohash.cabaneio2021.print.printStatistics
 import org.springframework.beans.factory.annotation.BeanFactoryAnnotationUtils
 import org.springframework.context.ApplicationContext
+import org.springframework.core.task.AsyncTaskExecutor
 import org.springframework.stereotype.Service
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionService
+import java.util.concurrent.ExecutorCompletionService
+import java.util.concurrent.Future
 
 @Service
 class DataInsertionService(
-    private val applicationContext: ApplicationContext
+    private val applicationContext: ApplicationContext,
+    private val taskExecutor: AsyncTaskExecutor,
 ) {
     fun insertData(
         usersCount: UInt,
@@ -22,9 +28,15 @@ class DataInsertionService(
         model.printStatistics()
         printSeparator()
 
-        inserters.forEach {
-            it.insertWithPrintedStatistics(model)
+        val futures = inserters.map {
+            CompletableFuture.runAsync({
+                it.insertWithPrintedStatistics(model)
+            }, taskExecutor)
         }
+
+        CompletableFuture.allOf(*futures.toTypedArray()).join()
+        println("finished inserting data for all inserters")
+
     }
 
     private fun findInserters(inserterNames: Set<String>): List<Inserter> {

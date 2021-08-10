@@ -11,7 +11,9 @@ import java.util.*
 
 const val NEO4J = "neo4j"
 
-interface Neo4jUserRepository : Neo4jRepository<Neo4jUserEntity, UUID>
+interface Neo4jUserRepository : Neo4jRepository<Neo4jUserEntity, UUID> {
+
+}
 
 @Component
 @Qualifier(NEO4J)

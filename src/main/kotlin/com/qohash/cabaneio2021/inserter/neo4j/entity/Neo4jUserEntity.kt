@@ -8,16 +8,16 @@ import java.util.*
 
 @Node("User")
 abstract class Neo4jUserEntity(
-    @Id open val id: UUID,
-    open val handle: String,
-    open val name: String,
-    open val joinDate: Instant,
-    @Relationship(type = "POSTED")
-    open var publications: List<Neo4jPublicationEntity>,
-    @Relationship(type = "LIKES")
-    open var likes: List<Neo4jTweetEntity>,
+    @Id val id: UUID,
+//    val handle: String,
+//    val name: String,
+//    val joinDate: Instant,
+//    @Relationship(type = "POSTED")
+//    var publications: List<Neo4jPublicationEntity>,
+//    @Relationship(type = "LIKES")
+//    var likes: List<Neo4jTweetEntity>,
     @Relationship(type = "FOLLOWS")
-    open var follows: List<Neo4jUserEntity>
+    var follows: List<Neo4jUserEntity>
 )
 
 
@@ -34,11 +34,11 @@ class Neo4jIndividualEntity(
     val gender: String
 ) : Neo4jUserEntity(
     id = id,
-    handle = handle,
-    name = name,
-    joinDate = joinDate,
-    publications = publications,
-    likes = likes,
+//    handle = handle,
+//    name = name,
+//    joinDate = joinDate,
+//    publications = publications,
+//    likes = likes,
     follows = follows,
 )
 
@@ -61,10 +61,10 @@ class Neo4jBusinessEntity(
     val verified: Boolean,
 ) : Neo4jUserEntity(
     id = id,
-    handle = handle,
-    name = name,
-    joinDate = joinDate,
-    publications = publications,
-    likes = likes,
+//    handle = handle,
+//    name = name,
+//    joinDate = joinDate,
+//    publications = publications,
+//    likes = likes,
     follows = follows,
 )
