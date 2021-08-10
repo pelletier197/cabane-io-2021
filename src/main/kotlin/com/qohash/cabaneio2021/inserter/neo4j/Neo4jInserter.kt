@@ -52,41 +52,42 @@ class Neo4jInserter(
 ) : Inserter {
     override fun insert(model: TwitterModel) {
         val users = model.users.map { it.toNeo4j() }
-        client.query(
+        val result = client.query(
             """
             FOREACH(business IN $${"businesses"} | 
-                CREATE (b:Business:User) SET b = business 
+                CREATE (businessNode:Business:User) SET businessNode = business 
             )
             
             FOREACH(individual IN $${"individuals"} | 
-                CREATE (i:Individual:User) SET i = individual
+                CREATE (individualNode:Individual:User) SET individualNode = individual
             )
             
             FOREACH(tweet IN $${"tweets"} | 
-                CREATE (t:Tweet:Publication) SET t = tweet.tweet
+                CREATE (tweetNode:Tweet:Publication) SET tweetNode = tweet.tweet
                 MERGE (user:User {id: tweet.authorId})
-                CREATE (user)-[:POSTED]->(t)
+                CREATE (user)-[:POSTED]->(tweetNode)
                 
                 FOREACH (userId IN tweet.mentionUserIds | 
                     MERGE (mentioned:User { id: userId })
-                    CREATE (t)-[:MENTIONS]->(mentioned)
+                    CREATE (tweetNode)-[:MENTIONS]->(mentioned)
                 )
                 
                 FOREACH(tag IN tweet.hashTags | 
-                    MERGE (hashTag:HashTag) SET hashTag = tag
+                    MERGE (tagNode:HashTag) SET tagNode = tag
+                    CREATE (tweetNode)-[:HAS_TAG]->(tagNode)
                 )
                 
                FOREACH(link IN tweet.links | 
-                    MERGE (l:HashTag) SET l = link
+                    MERGE (linkNode:Link) SET linkNode = link
                 )
                 
-                MERGE (s:Source) SET s = tweet.source
+                MERGE (sourceNode:Source) SET sourceNode = tweet.source
             )
             
             FOREACH(retweet IN $${"retweets"} | 
-                CREATE (r:Retweet:Publication) SET r = retweet.retweet
+                CREATE (retweetNode:Retweet:Publication) SET retweetNode = retweet.retweet
                 MERGE (author:User { id: retweet.authorId })
-                CREATE (author)-[:POSTED]->(r)
+                CREATE (author)-[:POSTED]->(retweetNode)
             )
             
             FOREACH(like IN $${"userLikes"} | 
@@ -111,5 +112,8 @@ class Neo4jInserter(
                 "userFollows" to model.userFollows.toNeo4jFollows(),
             ).map { it.key to mapper.convertValue<List<Map<String, Any>>>(it.value) }.toMap()
         ).run()
+
+        val summary = result.counters()
+        println("created ${summary.nodesCreated()} nodes and ${summary.relationshipsCreated()} relationships")
     }
 }
