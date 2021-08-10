@@ -68,12 +68,11 @@ fun Map<User, Set<Tweet>>.toNeo4jTweets(): List<TweetImport> {
     }
 }
 
-fun Map<User, Set<Retweet>>.toNeo4jRetweets() : List<RetweetImport> {
-    @Suppress("CANDIDATE_CHOSEN_USING_OVERLOAD_RESOLUTION_BY_LAMBDA_ANNOTATION")
+fun Map<User, Set<Retweet>>.toNeo4jRetweets(): List<RetweetImport> {
     return flatMap { (user, retweets) ->
-        return retweets.map { retweet ->
+        retweets.map { retweet ->
             RetweetImport(
-                retweet =  retweet.toNeo4j(),
+                retweet = retweet.toNeo4j(),
                 authorId = user.id.value,
                 tweetId = retweet.tweet.id.value,
             )

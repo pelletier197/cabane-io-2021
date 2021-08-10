@@ -54,12 +54,14 @@ class Neo4jInserter(
 ) : Inserter, InitializingBean {
     override fun insert(model: TwitterModel) {
         val users = model.users.map { it.toNeo4j() }
-        val result = client.query(
+        // Super optimal batch insertion. Converts something that takes around 10 minutes into a few seconds.
+        // Has the downside to not return any error if something in the queries is wrong
+        client.query(
             """
             ${
                 periodicIterate(
                     fetchQuery = "UNWIND $${"businesses"} AS business RETURN business",
-                    callback = "CREATE (businessNode:Business:User) SET businessNode = business",
+                    callback = "MERGE (businessNode:User { id: business.id }) SET businessNode = business SET businessNode:Business",
                     params = "{ businesses: $${"businesses"} }"
                 )
             }
@@ -67,7 +69,7 @@ class Neo4jInserter(
             ${
                 periodicIterate(
                     fetchQuery = "UNWIND $${"individuals"} AS individual RETURN individual",
-                    callback = "CREATE (individualNode:Individual:User) SET individualNode = individual",
+                    callback = "MERGE (individualNode:User { id: individual.id }) SET individualNode = individual SET individualNode:Individual",
                     params = "{ individuals: $${"individuals"} }"
                 )
             }
@@ -76,8 +78,8 @@ class Neo4jInserter(
                 periodicIterate(
                     fetchQuery = "UNWIND $${"tweets"} AS tweet RETURN tweet",
                     callback = """
-                            MATCH (user:User {id: tweet.authorId})
-                            CREATE (tweetNode:Tweet:Publication) SET tweetNode = tweet.tweet
+                            MERGE (user:User {id: tweet.authorId})
+                            MERGE (tweetNode:Tweet:Publication { id: tweet.tweet.id }) SET tweetNode = tweet.tweet
                             CREATE (user)-[:POSTED]->(tweetNode)
                             
                             FOREACH (userId IN tweet.mentionUserIds | 
@@ -94,8 +96,8 @@ class Neo4jInserter(
                                 MERGE (linkNode:Link {url: link.url }) 
                             )
                             
-                            MERGE (sourceNode:Source {name: tweet.source})
-                            CREATE (tweet)-[:POSTED_VIA]->(sourceNode)
+                            MERGE (sourceNode:Source {name: tweet.source.name})
+                            CREATE (tweetNode)-[:POSTED_VIA]->(sourceNode)
                     """,
                     params = "{ tweets: $${"tweets"} }",
                     batchSize = 25
@@ -106,9 +108,11 @@ class Neo4jInserter(
                 periodicIterate(
                     fetchQuery = "UNWIND $${"retweets"} AS retweet RETURN retweet",
                     callback = """
-                        MATCH (author:User { id: retweet.authorId })
+                        MERGE (author:User { id: retweet.authorId })
+                        MERGE (tweet:Tweet:Publication { id: retweet.tweetId })
                         CREATE (retweetNode:Retweet:Publication) SET retweetNode = retweet.retweet
                         CREATE (author)-[:POSTED]->(retweetNode)
+                        CREATE (retweetNode)-[:RETWEETS]->(tweet)
                     """,
                     params = "{ retweets: $${"retweets"} }"
                 )
@@ -118,8 +122,8 @@ class Neo4jInserter(
                 periodicIterate(
                     fetchQuery = "UNWIND $${"userLikes"} AS like RETURN like",
                     callback = """
-                        MATCH (user:User { id: like.userId })
-                        MATCH (tweet:Tweet { id: like.tweetId })
+                        MERGE (user:User { id: like.userId })
+                        MERGE (tweet:Tweet:Publication { id: like.tweetId })
                         CREATE (user)-[:LIKES]->(tweet)
                     """,
                     params = "{ userLikes: $${"userLikes"} }"
@@ -130,8 +134,8 @@ class Neo4jInserter(
                 periodicIterate(
                     fetchQuery = "UNWIND $${"userFollows"} AS follow RETURN follow",
                     callback = """
-                        MATCH (user:User { id: follow.followerId })
-                        MATCH (followed:User { id: follow.followedId })
+                        MERGE (user:User { id: follow.followerId })
+                        MERGE (followed:Tweet:Publication { id: follow.followedId })
                         CREATE (user)-[:FOLLOWS]->(followed)
                     """,
                     params = "{ userFollows: $${"userFollows"} }"
@@ -151,18 +155,18 @@ class Neo4jInserter(
             ).map { it.key to mapper.convertValue<List<Map<String, Any>>>(it.value) }.toMap()
         ).run()
 
-        val summary = result.counters()
-        println("created ${summary.nodesCreated()} nodes and ${summary.relationshipsCreated()} relationships in Neo4j")
     }
 
     override fun afterPropertiesSet() {
-        client.query("""
-           CREATE CONSTRAINT user_id_unique IF NOT EXISTS ON (user:User) ASSERT user.id IS UNIQUE
-           CREATE CONSTRAINT publication_id_unique IF NOT EXISTS ON (publication:Publication) ASSERT publication.id IS UNIQUE
-           CREATE CONSTRAINT link_url_unique IF NOT EXISTS ON (link:Link) ASSERT link.url IS UNIQUE
-           CREATE CONSTRAINT hashtag_value_unique IF NOT EXISTS ON (hashTag:HashTag) ASSERT hashTag.value IS UNIQUE
-           CREATE CONSTRAINT source_value_unique IF NOT EXISTS ON (source:Source) ASSERT source.name IS UNIQUE
-        """).run()
+        listOf(
+            "CREATE CONSTRAINT user_id_unique IF NOT EXISTS ON (user:User) ASSERT user.id IS UNIQUE",
+            "CREATE CONSTRAINT publication_id_unique IF NOT EXISTS ON (publication:Publication) ASSERT publication.id IS UNIQUE",
+            "CREATE CONSTRAINT link_url_unique IF NOT EXISTS ON (link:Link) ASSERT link.url IS UNIQUE",
+            "CREATE CONSTRAINT hashtag_value_unique IF NOT EXISTS ON (hashTag:HashTag) ASSERT hashTag.value IS UNIQUE",
+            "CREATE CONSTRAINT source_value_unique IF NOT EXISTS ON (source:Source) ASSERT source.name IS UNIQUE"
+        ).forEach {
+            client.query(it).run()
+        }
     }
 
     private fun periodicIterate(

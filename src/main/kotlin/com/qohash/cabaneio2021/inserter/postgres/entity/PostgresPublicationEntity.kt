@@ -34,7 +34,7 @@ class PostgresTweetEntity(
     val sourceName: String,
     @ManyToMany(cascade = [CascadeType.MERGE]) val hashTags: List<PostgresHashTagEntity>,
     @ManyToMany(cascade = [CascadeType.MERGE]) val links: List<PostgresLinkEntity>,
-    @ManyToMany(cascade = [CascadeType.MERGE]) val mentions: List<PostgresUserEntity>,
+    @ManyToMany(cascade = []) val mentions: List<PostgresUserEntity>,
 ) : PostgresPublicationEntity(
     id = id,
 )
