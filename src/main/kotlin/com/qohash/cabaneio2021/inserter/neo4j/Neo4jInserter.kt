@@ -95,7 +95,8 @@ class Neo4jInserter(
                             
                             MERGE (sourceNode:Source) SET sourceNode = tweet.source
                     """,
-                    params = "{ tweets: $${"tweets"} }"
+                    params = "{ tweets: $${"tweets"} }",
+                    batchSize = 25
                 )
             }
 
@@ -155,7 +156,8 @@ class Neo4jInserter(
     private fun periodicIterate(
         fetchQuery: String,
         callback: String,
-        params: String
+        params: String,
+        batchSize: Int = 50
     ): String {
         val randomVariableLetters: List<Char> = ('A'..'Z').toList()
         val randomVariable = (1..10).map { randomVariableLetters.random() }.joinToString(separator = "")
@@ -163,7 +165,7 @@ class Neo4jInserter(
             CALL apoc.periodic.iterate(
                 '$fetchQuery', 
                 '$callback',
-                {batchSize: 50, parallel: true, params: $params}
+                {batchSize: $batchSize, parallel: true, params: $params}
             ) YIELD total AS $randomVariable
         """.trimIndent()
     }
