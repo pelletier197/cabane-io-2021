@@ -1,5 +1,6 @@
 package com.qohash.cabaneio2021.inserter.postgres.entity
 
+import java.time.Instant
 import java.util.*
 import javax.persistence.*
 
@@ -32,7 +33,8 @@ class PostgresTweetEntity(
     val text: String,
     @Column(name = "source_name")
     val sourceName: String,
-    @ManyToMany(cascade = [CascadeType.MERGE]) val hashTags: List<PostgresHashTagEntity>,
+    val timestamp: Instant,
+    @ManyToMany(cascade = [CascadeType.MERGE], fetch = FetchType.EAGER)  val hashTags: List<PostgresHashTagEntity>,
     @ManyToMany(cascade = [CascadeType.MERGE]) val links: List<PostgresLinkEntity>,
     @ManyToMany(cascade = []) val mentions: List<PostgresUserEntity>,
 ) : PostgresPublicationEntity(

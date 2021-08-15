@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.data.neo4j.core.schema.Id
 import org.springframework.data.neo4j.core.schema.Node
 import org.springframework.data.neo4j.core.schema.Relationship
+import java.time.Instant
 import java.util.*
 
 @Node("Publication")
@@ -25,9 +26,7 @@ class Neo4jTweetEntity (
     id: UUID,
     val text: String,
     val sourceName: String,
-//    @Relationship(type = "HAS_TAG") var hashTags: List<Neo4jHashTagEntity>,
-//    @Relationship(type = "HAS_LINK") var links: List<Neo4jLinkEntity>,
-//    @Relationship(type = "MENTIONS") var mentions: List<Neo4jUserEntity>,
+    val timestamp: Instant,
 ) : Neo4jPublicationEntity(
     id = id,
 )

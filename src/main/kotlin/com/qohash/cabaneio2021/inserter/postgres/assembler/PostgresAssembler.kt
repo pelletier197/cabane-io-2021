@@ -89,6 +89,7 @@ fun Tweet.toPostgres(
         id = id.value,
         text = text,
         sourceName = source.name,
+        timestamp = timestamp,
         hashTags = hashtags.toPostgres(),
         links = links.toPostgres(),
         mentions = mentions.map { postgresUsersById[it.id.value]!! }

@@ -71,6 +71,7 @@ fun randomTweet(users: List<User>): Tweet {
     return Tweet(
         id = PublicationId(UUID.randomUUID()),
         text = faker.movie.quote(),
+        timestamp = randomInstant(),
         hashtags = randomSetOf(size = randomUInt(max = 5u)) { randomHashTag() },
         links = randomSetOf(size = randomUInt(max = 3u)) { randomLink() },
         mentions = randomListOf(size = randomUInt(4u)) { users.random() }.distinct().toSet(),

@@ -1,25 +1,18 @@
 package com.qohash.cabaneio2021.inserter.neo4j
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.convertValue
 import com.qohash.cabaneio2021.inserter.Inserter
 import com.qohash.cabaneio2021.inserter.TwitterModel
 import com.qohash.cabaneio2021.inserter.neo4j.assembler.*
 import com.qohash.cabaneio2021.inserter.neo4j.entity.*
-import net.bytebuddy.utility.RandomString
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.neo4j.core.Neo4jClient
-import org.springframework.data.neo4j.repository.Neo4jRepository
-import org.springframework.data.neo4j.repository.query.Query
 import org.springframework.stereotype.Component
 import java.util.*
 
 const val NEO4J = "neo4j"
-
-interface Neo4jUserRepository : Neo4jRepository<Neo4jUserEntity, UUID> {
-}
 
 data class TweetImport(
     val tweet: Neo4jTweetEntity,
@@ -94,6 +87,7 @@ class Neo4jInserter(
                             
                            FOREACH(link IN tweet.links | 
                                 MERGE (linkNode:Link {url: link.url }) 
+                                CREATE (tweetNode)-[:HAS_LINK]->(linkNode)
                             )
                             
                             MERGE (sourceNode:Source {name: tweet.source.name})
@@ -135,7 +129,7 @@ class Neo4jInserter(
                     fetchQuery = "UNWIND $${"userFollows"} AS follow RETURN follow",
                     callback = """
                         MERGE (user:User { id: follow.followerId })
-                        MERGE (followed:Tweet:Publication { id: follow.followedId })
+                        MERGE (followed:User { id: follow.followedId })
                         CREATE (user)-[:FOLLOWS]->(followed)
                     """,
                     params = "{ userFollows: $${"userFollows"} }"

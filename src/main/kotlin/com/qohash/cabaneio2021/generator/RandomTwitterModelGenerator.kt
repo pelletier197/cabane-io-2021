@@ -10,7 +10,7 @@ private class RandomTwitterModel(
     val usersCount: UInt,
 ) : AbstractTwitterModel() {
     private val maxTweetsPerUser = 30u
-    private val maxRetweetsPerUser = 90u
+    private val maxRetweetsPerUser = 100u
     private val maxLikesPerUser = 100u
     private val maxFollowPerUser = 100u
 

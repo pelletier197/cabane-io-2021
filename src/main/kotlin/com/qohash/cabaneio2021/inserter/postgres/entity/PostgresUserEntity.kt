@@ -1,5 +1,6 @@
 package com.qohash.cabaneio2021.inserter.postgres.entity
 
+import org.springframework.stereotype.Indexed
 import java.time.Instant
 import java.util.*
 import javax.persistence.*

@@ -106,6 +106,7 @@ fun Tweet.toNeo4j(): Neo4jTweetEntity {
     return Neo4jTweetEntity(
         id = id.value,
         text = text,
+        timestamp = timestamp,
         sourceName = source.name,
     )
 }
