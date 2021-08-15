@@ -25,9 +25,6 @@ The accent is mostly put on the ease of developing and understanding the differe
 ### PostgreSQL
 The first database in our comparison list is a pretty popular one in the SQL world. [PostgreSQL](https://www.postgresql.org/) widely used, extremely powerful and is also the most popular overall because of the numerous plugins available for it.
 
-### MongoDB
-The second one on our list is the probably the most popular document database, [MongoDB](https://www.mongodb.com/). It's one of the favorite for its simplicity to get started, its great native features. Not only that, it's designed to run in large clusters to create distributed data centers that scale infinitely. 
-
 ### Neo4j 
 Next one on our list is by far the most popular Graph database on the market. [Neo4j](https://neo4j.com/) has been around since 2007, but it's gotten more popular only in the last few years, as use-cases for Graph databases seem to multiply.
 
@@ -41,3 +38,31 @@ Last but not least on our list is [ArangoDB](https://www.arangodb.com/), that I 
 - Docker with docker-compose to start the databases
 
 ### Start the application
+#### Start the databases
+```bash
+# For all databases
+docker-compose up -d
+ 
+ # Just select the ones you want 
+ # Postgres is mandatory for the application to start, since hibernate creates the tables
+docker-compose up -d postgres neo4j 
+```
+
+#### Run the applications
+```bash
+./gradlew assemble && java -jar build/libs/cabane.io-twitter.jar
+```
+
+Once inside the interactice shell, you can run a suite of commands
+
+```bash
+twitter:> help
+
+twitter:> insert-users --inserters postgres,neo4j,arangodb --count 100  
+
+twitter:> exit
+```
+
+You can also start it directly from your IDE
+
+

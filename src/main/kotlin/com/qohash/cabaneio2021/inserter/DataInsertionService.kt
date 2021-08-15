@@ -18,7 +18,7 @@ class DataInsertionService(
     private val applicationContext: ApplicationContext,
     private val taskExecutor: AsyncTaskExecutor,
 ) {
-    fun insertData(
+    fun insertUsers(
         usersCount: UInt,
         inserterNames: Set<String>,
     ) {
