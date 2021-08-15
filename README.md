@@ -48,12 +48,12 @@ docker-compose up -d
 docker-compose up -d postgres neo4j 
 ```
 
-#### Run the applications
+#### Run the application
 ```bash
 ./gradlew assemble && java -jar build/libs/cabane.io-twitter.jar
 ```
 
-Once inside the interactice shell, you can run a suite of commands
+Once inside the interactive shell, you can run a suite of commands
 
 ```bash
 twitter:> help
