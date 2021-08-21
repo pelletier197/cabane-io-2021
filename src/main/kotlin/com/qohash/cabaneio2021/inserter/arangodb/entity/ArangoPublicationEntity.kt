@@ -14,7 +14,7 @@ abstract class ArangoPublicationEntity(
 
 class ArangoRetweetEntity(
     id: UUID,
-    @Relations(edges = [RetweetsRelation::class]) val tweet: ArangoTweetEntity,
+    @Relations(edges = [RetweetsRelation::class], direction = Relations.Direction.OUTBOUND) val tweet: ArangoTweetEntity,
 ) : ArangoPublicationEntity(
     id = id,
 )
@@ -27,9 +27,9 @@ class ArangoTweetEntity(
     val text: String,
     val sourceName: String,
     val timestamp: Instant,
-    @Relations(edges = [HasTagRelation::class]) val hashTags: List<ArangoHashTagEntity>,
-    @Relations(edges = [HasLinkRelation::class]) val links: List<ArangoLinkEntity>,
-    @Relations(edges = [MentionsRelation::class]) val mentions: List<ArangoUserEntity>,
+    @Relations(edges = [HasTagRelation::class], direction = Relations.Direction.OUTBOUND) val hashTags: List<ArangoHashTagEntity>,
+    @Relations(edges = [HasLinkRelation::class], direction = Relations.Direction.OUTBOUND) val links: List<ArangoLinkEntity>,
+    @Relations(edges = [MentionsRelation::class], direction = Relations.Direction.OUTBOUND) val mentions: List<ArangoUserEntity>,
 ) : ArangoPublicationEntity(
     id = id,
 )

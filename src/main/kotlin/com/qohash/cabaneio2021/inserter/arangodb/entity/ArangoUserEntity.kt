@@ -13,9 +13,9 @@ abstract class ArangoUserEntity(
     open val handle: String,
     open val name: String,
     open val joinDate: Instant,
-    @Relations(edges = [PostedRelation::class]) open var publications: List<ArangoPublicationEntity>,
-    @Relations(edges = [FollowsRelation::class]) open var follows: List<ArangoUserEntity>,
-    @Relations(edges = [LikesRelation::class]) open var likes: List<ArangoTweetEntity>
+    @Relations(edges = [PostedRelation::class], direction = Relations.Direction.OUTBOUND) open var publications: List<ArangoPublicationEntity>,
+    @Relations(edges = [FollowsRelation::class], direction = Relations.Direction.OUTBOUND) open var follows: List<ArangoUserEntity>,
+    @Relations(edges = [LikesRelation::class], direction = Relations.Direction.OUTBOUND) open var likes: List<ArangoTweetEntity>
 ) {
     override fun toString(): String {
         return "ArangoUserEntity(id=$id, handle='$handle', name='$name', joinDate=$joinDate)"
