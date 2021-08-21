@@ -1,9 +1,5 @@
 package com.qohash.cabaneio2021.inserter.postgres.assembler
 
-import PostgresHashTagEntity
-import PostgresLinkEntity
-import PostgresRetweetEntity
-import PostgresTweetEntity
 import com.qohash.cabaneio2021.inserter.TwitterModel
 import com.qohash.cabaneio2021.inserter.postgres.entity.*
 import com.qohash.cabaneio2021.model.contact.web.Link

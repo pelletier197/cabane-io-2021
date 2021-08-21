@@ -1,7 +1,5 @@
 package com.qohash.cabaneio2021.inserter.postgres.entity
 
-import PostgresPublicationEntity
-import PostgresTweetEntity
 import java.time.Instant
 import java.util.*
 import javax.persistence.*
