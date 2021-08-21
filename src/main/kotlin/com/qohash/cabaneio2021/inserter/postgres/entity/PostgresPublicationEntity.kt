@@ -1,4 +1,3 @@
-import com.qohash.cabaneio2021.inserter.arangodb.entity.ArangoUserEntity
 import com.qohash.cabaneio2021.inserter.postgres.entity.PostgresUserEntity
 import java.time.Instant
 import java.util.*
