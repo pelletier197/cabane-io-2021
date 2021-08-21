@@ -14,7 +14,7 @@ abstract class ArangoPublicationEntity(
 
 class ArangoRetweetEntity(
     id: UUID,
-    @Relations(edges = [RetweetsRelation::class], direction = Relations.Direction.OUTBOUND) val tweet: ArangoTweetEntity,
+    @Relations(edges = [RetweetsRelation::class], direction = Relations.Direction.OUTBOUND) val tweet: ArangoTweetEntity?,
 ) : ArangoPublicationEntity(
     id = id,
 )
