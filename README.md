@@ -45,9 +45,12 @@ docker-compose up -d
  
  # Just select the ones you want 
  # Postgres is mandatory for the application to start, since hibernate creates the tables
-docker-compose up -d postgres neo4j 
+docker-compose up -d postgres neo4j arango-db
 ```
-
+- Neo4j Browser is available at http://localhost:7474
+- ArangoDB's web interface is also available at http://localhost:8529
+- As for Postgres, choose your favorite IDE 
+- 
 #### Run the application
 ```bash
 ./gradlew assemble && java -jar build/libs/cabane.io-twitter.jar

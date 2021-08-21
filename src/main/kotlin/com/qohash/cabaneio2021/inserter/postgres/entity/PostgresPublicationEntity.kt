@@ -1,5 +1,5 @@
-package com.qohash.cabaneio2021.inserter.postgres.entity
-
+import com.qohash.cabaneio2021.inserter.arangodb.entity.ArangoUserEntity
+import com.qohash.cabaneio2021.inserter.postgres.entity.PostgresUserEntity
 import java.time.Instant
 import java.util.*
 import javax.persistence.*
@@ -46,37 +46,11 @@ class PostgresTweetEntity(
 data class PostgresHashTagEntity(
     @Id
     val value: String
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is PostgresHashTagEntity) return false
-
-        if (value != other.value) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return value.hashCode()
-    }
-}
+)
 
 @Entity
 @Table(name = "links")
 data class PostgresLinkEntity(
     @Id
     val url: String
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is PostgresLinkEntity) return false
-
-        if (url != other.url) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return url.hashCode()
-    }
-}
+)
