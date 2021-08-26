@@ -48,9 +48,13 @@ docker-compose up -d
 docker-compose up -d postgres neo4j arango-db
 ```
 - Neo4j Browser is available at http://localhost:7474
+  - Username: neo4j
+  - Password: cabaneio2021
 - ArangoDB's web interface is also available at http://localhost:8529
-- As for Postgres, choose your favorite IDE 
-- 
+    - Username: root
+    - Password: cabaneio2021
+- As for Postgres, choose your favorite IDE
+
 #### Run the application
 ```bash
 ./gradlew assemble && java -jar build/libs/cabane.io-twitter.jar
