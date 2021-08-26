@@ -1,0 +1,41 @@
+spring:
+  main:
+    web-application-type: none
+    lazy-initialization: true
+
+
+  # Neo4j
+  neo4j:
+    authentication:
+      username: neo4j
+      password: cabaneio2021
+
+  # Postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false # Allow avoiding to query database at startup for metadata
+        event:
+          merge:
+            entity_copy_observer: allow
+    show-sql: false # turn on if wished
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cabaneio
+    username: postgres
+    password: cabaneio2021
+
+  # Mongo
+  data:
+    mongodb:
+      database: cabaneio
+      username: mongo
+      password: cabaneio2021
+
+logging:
+  level:
+    org.springframework.data.neo4j: INFO
