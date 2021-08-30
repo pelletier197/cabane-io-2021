@@ -79,7 +79,6 @@ docker-compose up -d
 
 - Neo4j Browser is available at http://localhost:7474
 - As for Postgres, choose your favorite IDE
--
 
 #### Run the application
 ```bash
