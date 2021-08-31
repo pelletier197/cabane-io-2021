@@ -77,13 +77,14 @@ creating random users, and assigning to each user a random number of tweets, ret
 docker-compose up -d
 ```
 
-- Neo4j Browser is available at http://localhost:7474
-  - User: neo4j
-  - Password: cabaneio2021
-- As for Postgres, choose your favorite IDE
-  - User: postgres
-  - Password: cabaneio2021
-  - Database: cabaneio
+Neo4j Browser is available at http://localhost:7474
+- User: neo4j
+- Password: cabaneio2021
+
+As for Postgres, choose your favorite IDE
+- User: postgres
+- Password: cabaneio2021
+- Database: cabaneio
 
 
 #### Run the application
