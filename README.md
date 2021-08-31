@@ -78,7 +78,13 @@ docker-compose up -d
 ```
 
 - Neo4j Browser is available at http://localhost:7474
+  - User: neo4j
+  - Password: cabaneio2021
 - As for Postgres, choose your favorite IDE
+  - User: postgres
+  - Password: cabaneio2021
+  - Database: cabaneio
+
 
 #### Run the application
 ```bash
