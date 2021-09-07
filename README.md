@@ -12,7 +12,7 @@ at [Cabane.io 2021](https://cabane.io/) conference.
 
 ## Results
 
-The results and presentation slides associated to this project will be available shortly...
+The results and presentation slides associated to this presentation are available [here](https://docs.google.com/presentation/d/12VOmYn9zlHDJQMMtNe-Egn6iBa6JDXoYjKiEuA5Qft8/edit?usp=sharing).
 
 You can also have fun and create your own queries if you'd like.
 
