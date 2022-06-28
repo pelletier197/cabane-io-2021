@@ -6,8 +6,8 @@
 
 ## Overview
 
-This repository offers a simple implementation of a modified version [Twitter](https://twitter.com/?lang=en) by using
-different type of databases. The results queries and performances to answer different questions were presented
+This repository offers a simple implementation of a modified version of [Twitter](https://twitter.com/?lang=en) by using
+different type of databases. The resulting queries and performance to answer different questions were presented
 at [Cabane.io 2021](https://cabane.io/) conference.
 
 ## Results
